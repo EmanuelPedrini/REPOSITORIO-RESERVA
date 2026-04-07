@@ -8,7 +8,7 @@ from Tutorial import tutorial, full_name_with_nickname
 from Kimeras_Data import actualize_princesses, actualize_queen
 from Globals import looktheirteeths
 from Globals import banned_from_twitter
-import pgterminal
+# import pgterminal
 
 def run_expedition():
     actualize_princesses(allkimeras)
@@ -60,7 +60,7 @@ def run_expedition():
     if player is None:
         return
     
-    pgterminal.current_player = player
+    # pgterminal.current_player = player
     
     print(f"Congrats! You chosed {full_name_with_nickname(player)}!")
     player.acthp = player.total_max_hp

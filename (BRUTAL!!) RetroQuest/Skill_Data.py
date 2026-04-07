@@ -15,8 +15,8 @@ block =skill("Block", "You receive shield", 0, 0, 3, 2, target="self", skpropert
 bite=skill("Toe Bite", "You bite your enemy with the strength of a lion!", 3, 0, 0, 2, target="enemy", skproperty="HealOnHit")
 bloodfeast=skill("Blood Feast", "You drink the blood of your enemies!", 6, 0, 0, 7, target="allenemies",skproperty="MassHealOnDmg")
 teleport=skill("Teleport","You teleport above a enemy and cause damage.", 9, 0, 0, 5, target="enemy", skproperty="any")
-arranhar=skill("Scratch", "aaaaaa",4, 0, 0, 2, target="enemy", skproperty="any")
-Manaboy=skill("Mana Cannibal", "Mana can", 0, 0, 0, 0, target="allenemies", skproperty="DamageBasedOnMana")
+arranhar=skill("Scratch", "Scratch the skin of your enemies!",4, 0, 0, 2, target="enemy", skproperty="any")
+Manaboy=skill("Mana Cannibal", "Cause a massive damage to all enemies based on half of your actual mana", 0, 0, 0, 0, target="allenemies", skproperty="DamageBasedOnMana")
 
 #lista de todas as skills
 todasskills = [fireball,healing,satorogojonaooooo, lightning, magicspark, donothing, bite, bloodfeast, teleport, arranhar, manaflow, Manaboy]
