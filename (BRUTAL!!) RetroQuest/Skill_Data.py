@@ -7,8 +7,8 @@ from Skills import skill
 #skills
 fireball=skill("Fireball", "You cast a giant fireball to destroy your enemies!", 14, 0, 0, 9, target="allenemies", skproperty="")
 healing= skill("Healing", "You heal your wounds", 0, 5, 0, 4, target="self", skproperty="any")
-satorogojonaooooo= skill("Deep Purple", "GOJO NOOOO", 18, 0, 0, 12, target="enemy", skproperty="any")
-manaflow=skill("Mana Flow", f"you use all your actual mana (0) and heal a equivalent amount.", 0, 0, 0, target="self", skproperty="ManaFlow")
+satorogojonaooooo= skill("Deep Purple", "Cause MASSIVE damage to a single target at a high mana cost.", 24, 0, 0, 14, target="enemy", skproperty="any")
+manaflow=skill("Mana Flow", "you use all your actual mana and heal a equivalent amount.", 0, 0, 0, target="self", skproperty="ManaFlow")
 lightning=skill("Lightning", "You cast multiple lightnings in a area", 8, 0, 0, 5, target="allenemies", skproperty="any")
 magicspark=skill("Magic Spark", "A simple spell that every mage needs to know!", 4, 0, 0, 3, target="enemy",skproperty="any")
 donothing=skill("Do nothing!", "You do nothing.", 0, 0, 0, 2, target="self", skproperty="any")

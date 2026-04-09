@@ -142,12 +142,15 @@ def playerturn(player, actenemy, sav2):
 
         #Ações possíveis
         while Globals.gamerunning == 1:
-             print(f"> HP: {player.acthp} / {player.total_max_hp} ")
-             print(f"> MP: {player.actmana} / {player.max_mana} ")
+          #    print(f"> HP: {player.acthp} / {player.total_max_hp} ")
+          #    print(f"> MP: {player.actmana} / {player.max_mana} ")
              print("> Time to Act!\n> Actions:")
              print("[1] - BASIC ATTACK")
              for i, ski in enumerate(player.skills):
-                  print(f"[{i+2}] - {ski.basename} ( {ski.cost} Mana )")
+                  if ski.cost > 0:
+                    print(f"[{i+2}] - {ski.basename} ( {ski.cost} Mana )")
+                  else:
+                    print(f"[{i+2}] - {ski.basename}")
                   
              choice = input_player(player, actenemy)     
              if choice =="1":
@@ -186,10 +189,39 @@ def playerturn(player, actenemy, sav2):
                          print("Sorry, that is a invalid Ability.")
                          continue
                        
-             elif choice == "look" or choice == "lk":
-                    analize_choice = input("Which skill you want to look closely?")
+             elif choice == "lookskill" or choice == "lksk":
+                    print("YOUR SKILLS:")
+                    for i, ski in enumerate(player.skills):
+                         print(f"[{i+1}] - {ski.basename} ( {ski.cost} Mana )")
+                    analize_choice = input("Which skill you want to look closely?\n> ")
                     if analize_choice.isdigit():
                          sdx = int(analize_choice) - 1
+                         if 0<= sdx <len(player.skills):
+                              skill_alisada = player.skills[sdx]
+                              print(f"{skill_alisada.basename}") 
+                              print(f"- {skill_alisada.text}")
+                              if skill_alisada.damage>0:
+                                   print(f"DAMAGE: {skill_alisada.damage + (player.temporary_magicdmgbonus + player.magicdmgbonus)}")
+                                   if skill_alisada.target=="allenemies":
+                                        print(f"This skill cause damage to ALL ENEMIES.")
+                                   else:
+                                        print("This skill cause damage to a SINGLE TARGET.")
+
+                              if skill_alisada.heal > 0:
+                                   print(f"HEALING: {skill_alisada.heal}")
+
+                              if skill_alisada.shieldgain > 0:
+                                   print(f"SHIELD GAIN: {skill_alisada.shieldgain}")
+
+                              if skill_alisada.cost > 0:
+                                   print(f"MANA COST: {skill_alisada.cost - (player.skillcostmodifier + player.temporary_skillcostmodifier)}")
+                              print("")
+                         else:
+                              print("Thats a invalid skill.")
+                    else:
+                         print("Please, type a valid choice.")
+                              
+
 
              elif choice in ("endturn", "et"):
                     print(f"{player.name} ended {player.possessive} turn!")
