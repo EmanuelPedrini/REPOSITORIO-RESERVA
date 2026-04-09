@@ -21,6 +21,8 @@ class kimera:
                  skills, 
                  passives,
                  mutations,
+                 bonus_to_right,
+                 bonus_to_left,
                  shieldstat = 0,  
                  status="Bone Eater"):
         
@@ -73,14 +75,23 @@ class kimera:
         self.armor = armor
         self.shieldstat = shieldstat
         self.bonus_crit_chance = 0
+
         self.magicdmgbonus = 0
-        self.shield = 0
+        self.temporary_magicdmgbonus = 0
+
         self.atkdmgbonus = 0
+        self.temporary_atkdmgbonus = 0
+
         self.critmult = 2
+        self.shield = 0
+
         self.skillcostmodifier = 0
+        self.temporary_skillcostmodifier = 0
         
         self.atkform = atkform
+
         self.status = status
+
         self.age = 1
 
         #ACT
@@ -95,6 +106,26 @@ class kimera:
         #inventory system
         #inventario é so uma big lista anota ai
         self.inventory =[]
+
+        self.stunned = False
+
+        self.right_hand = True
+        self.left_hand = True
+
+        self.mainhand = random.choice(["Left Hand", "Right Hand"])
+        if self.mainhand == "Left Hand":
+            self.handpoints = -5
+        else:
+            self.handpoints = +5
+
+        self.base_bonus_to_right = bonus_to_right
+        self.base_bonus_to_left = bonus_to_left
+        
+        self.gained_bonus_to_right = 0
+        self.gained_bonus_to_left = 0
+
+        self.temporary_bonus_to_right = 0
+        self.temporary_bonus_to_left = 0
 
         self.equipments = {
             "Weapon": None,
@@ -111,6 +142,19 @@ class kimera:
     
     #TOTAIS
     #TOTAL STRENGTH
+
+    @property
+    def total_atkdmgbonus(self):
+        return self.atkdmgbonus + self.temporary_atkdmgbonus
+
+    @property
+    def total_bonus_to_right(self):
+        return self.base_bonus_to_right + self.gained_bonus_to_right + self.temporary_bonus_to_right
+    
+    @property
+    def total_bonus_to_left(self):
+        return self.base_bonus_to_left + self.gained_bonus_to_left + self.temporary_bonus_to_left
+
     @property
     def total_strg(self):
         return self.base_strg + self.gained_strg + self.bonus_strg
@@ -268,6 +312,18 @@ class kimera:
 
             self.actmana -= amountused
             print(f"Now you have [ {self.actmana} / {self.max_mana} ] Mana Points!")
+
+    def choose_attack_hand(self):
+        hand_choser = (random.randint(1, 100) + self.handpoints)
+        if hand_choser >= 50 and self.right_hand: 
+            return "Right Hand"
+        elif self.left_hand:
+            return "Left Hand"
+        elif self.right_hand:
+            return "Right Hand"
+        else:
+            return "Head"
+
            
         
     #BASIC ATTACK
@@ -278,21 +334,36 @@ class kimera:
 
             if roll > target.dodge:
 
-                #Computa o Dano
-                basedmg = max(1, self.total_strg * 0.75)
-                randdmg = random.randint(0, int(self.total_strg * 0.5))
-                damage = int(basedmg + randdmg) + self.atkdmgbonus
+                turnhand = self.choose_attack_hand()
+                if turnhand == "Left Hand":
+                    hand_bonus = self.total_bonus_to_left
+                    for p in player.passives:
+                          if p.trigger=="on_left_hit":
+                             p.passiveactivationtrigger(self,damage)
 
+                elif turnhand == "Right Hand":
+                    hand_bonus = self.total_bonus_to_right
+                    for p in player.passives:
+                            if p.trigger=="on_right_hit":
+                                p.passiveactivationtrigger(self,damage)
+                else:
+                    hand_bonus = 0
+
+                #Computa o Dano
+                basedmg = max(1, self.total_strg * 0.75) + hand_bonus
+                randdmg = random.randint(0, int(self.total_strg * 0.5))
+
+                damage = int(basedmg + randdmg) + self.total_atkdmgbonus
                 crit = False
                 if rollcrit < self.total_crit_chance:
                     damage *= self.critmult
                     crit = True
                 
                 if crit==True:
-                    print(f"> The [ {self.name} ] got A BRUTAL HIT!! Dealing [ {damage} ] MASSIVE DAMAGE to [ {target.name}!!]")
+                    print(f"> {self.name} got A BRUTAL HIT!! Dealing [ {damage} ] MASSIVE DAMAGE using the {turnhand} to {target.name}")
 
                 else:
-                    print(f"> The [ {self.name} ] HIT! Dealing [ {damage} ] DAMAGE to [ {target.name} ]")
+                    print(f"> {self.name} HIT! Dealing [ {damage} ] DAMAGE using the {turnhand} to {target.name}")
 
                 #Computa o tanto que tu curo com o ataque
                 if self.vampirism != 0:
@@ -304,9 +375,9 @@ class kimera:
                     player.toma(int(Espinhado))
                     print(f"> You taked [ {Espinhado} ] damage from the enemy thorns!")
                 
-                for pas in player.passives:
-                    if pas.trigger=="on_hit":
-                        pas.passiveactivationtrigger(self, damage)
+                for p in player.passives:
+                    if p.trigger=="on_hit":
+                        p.passiveactivationtrigger(self, damage)
                 
                 target.toma(damage, player)
 
@@ -492,6 +563,8 @@ class kimera:
         bs_luck0 = inherit(parent1.base_luck, parent2.base_luck)
         bs_cha0 = inherit(parent1.base_cha, parent2.base_cha)
         bs_intel0 = inherit(parent1.base_intel, parent2.base_intel)
+        bs_bonus_left0 = inherit(parent1.base_bonus_to_left, parent2.base_bonus_to_left)
+        bs_bonus_right0 = inherit(parent1.base_bonus_to_right, parent2.base_bonus_to_right)
         bs_dodge0 = 0
         bs_vampirism0 = 0
         bs_thorns0 = 0
@@ -506,7 +579,7 @@ class kimera:
         return cls(name, surname, nickname, pronoun, pos,
                     bs_strg0, bs_dex0, bs_vit0, bs_luck0, bs_cha0, bs_intel0,
                     bs_dodge0, bs_vampirism0, bs_thorns0, bs_armor0, bs_atkform0,
-                    bs_skills0,bs_passives0, bs_mutations0, bs_shieldstat0, bs_status0
+                    bs_skills0,bs_passives0, bs_mutations0,bs_bonus_right0, bs_bonus_left0, bs_shieldstat0, bs_status0
                     )
     
     @classmethod
@@ -536,13 +609,15 @@ class kimera:
                 return []
             else:
                 return [random.choice(todasaspassivas)]
+            
                 
         name = generate_a_random_name()
         surname = generate_a_random_surname()
         nickname = generate_a_random_nickname()
         return cls( name, surname, nickname, pronoun, pos, 
                    random_status(), random_status(), random_status(), random_status(), random_status(), random_status(),
-                   0, 0, 0, 0, "melee", bs_skills, random_passive(), bs_mut, 0, statusquokk
+                   0, 0, 0, 0, "melee", bs_skills, random_passive(), bs_mut, 0, random.randint(0, 2), 
+                   0, statusquokk
         )
 
     

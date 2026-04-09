@@ -20,7 +20,7 @@ beast = enemy.fusion(fusioned1,fusioned2)
 
 
 
-enemiespool =[fluffyskeleton, undeadgrandma, dasbinich, unthought, kidvampire, ironmaiden, marshmallowknight, 
+enemiespool =[fluffyskeleton, undeadgrandma, dasbinich, unthought, kidvampire, ironmaiden, marshmallowknight,
               beast, wildkimera]
 
 enemiespoolact2 = [beast, wildkimera, chainsawshark, darknesscowboy, hammerheadkimera]

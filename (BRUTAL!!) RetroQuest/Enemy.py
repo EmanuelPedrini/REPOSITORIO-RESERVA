@@ -24,11 +24,35 @@ class enemy:
 
         self.atkdist = atkdist
 
+        #debuffs
+        self.fire_amount = 0
+        self.bleeding_amount = 0
+
+        self.leech_amount = 0
+        self.mana_leech_amount = 0
+
+        self.bruise_amount = 0
+
+        self.stunned = False
+        self.cursed = False
+        self.blind = False
+        self.charmed = False
+        self.weakness = False
+
         #self.dead=False
     #Ancora 3
 
     def toma(self, damage, player):
-        self.acthp -= damage
+        if self.cursed:
+            taked_damage = damage * Globals.cursemultiplier
+
+        elif self.weakness:
+            taked_damage = int(damage * 1.5)
+            
+        else:
+            taked_damage = damage
+
+        self.acthp -= taked_damage
         self.death(player)
 
     def heal(self, amount):

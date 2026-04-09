@@ -26,25 +26,25 @@ torn_clothes = item("Torn Clothes", "Armor", bonus={"thorns": 3} )
 leather_armor = item("Leather Armor", "Armor", bonus={"gained_vit": 2} )
 chainmail = item("Chainmail", "Armor", bonus={"armor": 3})
 
-iron_armor = item(name="Iron Armor", slot="Armor", bonus={"defbonus": 7, "gained_hp": 15})
-knight_armor = item(name="Knight Armor", slot="Armor", bonus={"defbonus": 9, "gained_hp": 20, "gained_strg": 1})
-shadow_cloak = item(name="Shadow Cloak", slot="Armor", bonus={"defbonus": 8, "gained_luck": 2})
-flame_robe = item(name="Flame Robe", slot="Armor", bonus={"defbonus": 10, "gained_intel": 2})
-thunder_plate = item(name="Thunder Plate", slot="Armor", bonus={"defbonus": 12, "gained_strg": 2})
-frozen_mail = item(name="Frozen Mail", slot="Armor", bonus={"defbonus": 13, "gained_hp": 25})
+iron_armor = item(name="Iron Armor", slot="Armor", bonus={"armor": 5, "gained_vit": 2})
+knight_armor = item(name="Knight Armor", slot="Armor", bonus={"armor": 3, "gained_vit": 2, "gained_strg": 2})
+shadow_cloak = item(name="Shadow Cloak", slot="Armor", bonus={"armor": 4, "gained_luck": 3})
+flame_robe = item(name="Flame Robe", slot="Armor", bonus={"armor": 3, "gained_intel": 4})
+thunder_plate = item(name="Thunder Plate", slot="Armor", bonus={"armor": 6, "gained_strg": 1})
+frozen_mail = item(name="Frozen Mail", slot="Armor", bonus={"armor": 4, "gained_vit": 3})
 
 #lista com todas as armaduras
-todasasarmors=[torn_clothes, leather_armor, chainmail]
+todasasarmors=[torn_clothes, leather_armor, chainmail, iron_armor, knight_armor, shadow_cloak,flame_robe,thunder_plate, frozen_mail]
 
 #acsessories
 old_ring = item("Old Ring", "Accessory",bonus={"gained_strg": 2})
 mana_pendant = item("Mana Pendant", "Accessory",bonus={"gained_intel": 2} )
 lucky_charm = item("Lucky Charm", "Accessory", bonus={"gained_luck": 2})
 
-old_necklace = item(name="Old Necklace", slot="Accessory", bonus={"gained_hp": 5})
-copper_ring = item(name="Copper Ring", slot="Accessory", bonus={"gained_strg": 1})
-simple_bracelet = item(name="Simple Bracelet", slot="Accessory", bonus={"gained_hp": 3})
-worn_amulet = item(name="Worn Amulet", slot="Accessory", bonus={"gained_intel": 1})
+old_necklace = item(name="Old Necklace", slot="Accessory", bonus={"gained_hp": 2})
+copper_ring = item(name="Copper Ring", slot="Accessory", bonus={"gained_strg": 1, "gained_luck": 1})
+simple_bracelet = item(name="Simple Bracelet", slot="Accessory", bonus={"gained_cha": 2})
+worn_amulet = item(name="Worn Amulet", slot="Accessory", bonus={"magicdmgbonus": 2})
 wooden_necklace = item(name="Wooden Necklace", slot="Accessory", bonus={"gained_hp": 4})
 common_pendant = item(name="Common Pendant", slot="Accessory", bonus={"gained_intel": 2})
 

@@ -171,7 +171,8 @@ def full_name_with_nickname(chose):
 
 def end_day():
     
-    from Kimeras_Data import allkimeras, kimera, actualize_breed, actualize_princesses, actualize_queen
+    from Kimeras_Data import allkimeras, actualize_breed, actualize_princesses, actualize_queen
+    from Kimera import kimera
 
     print(f"you finished the Day [ TOTAL DAYS: {Globals.day} ]")
 

@@ -6,6 +6,7 @@ gamerunning = 0
 bosscall = "notcalled"
 
 runcents = 0
+cursemultiplier = 2
 
 breeding = False
 endofarun = False
@@ -77,6 +78,11 @@ def looktheirteeths(analized):
     print(f"THORNS: {analized.thorns}")
     print(f"DODGE: {analized.total_dodge} %")
     print(f"VAMPIRISM: {analized.vampirism} %")
+    if analized.mainhand=="Left Hand":
+         print(f"{analized.name} likes more {analized.possessive} LEFT HAND.")
+    else:
+         print(f"{analized.name} likes more {analized.possessive} RIGHT HAND.")
+
     print("SKILLS:")
     if analized.skills==[]:
         print("Any skills.")

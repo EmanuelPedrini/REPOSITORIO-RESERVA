@@ -12,10 +12,10 @@ class skill:
           self.skproperty = skproperty
 
     def total_mana_cost(self, player):
-          return max(1, self.cost - player.skillcostmodifier)
+          return max(1, self.cost - (player.skillcostmodifier + player.temporary_skillcostmodifier))
     
     def total_skill_damage(self, player):
-          return max(1, self.damage + player.magicdmgbonus)
+          return max(1, self.damage + (player.magicdmgbonus + player.temporary_magicdmgbonus))
        
 
     def nome_modificado(self):
@@ -99,7 +99,7 @@ class skill:
                         #          actenemy.remove(u)
 
                   elif self.skproperty=="DamageBasedOnMana":
-                        dmsbsm = int(player.actmana * 0.5)
+                        dmsbsm = player.actmana//2
                         player.actmana -= dmsbsm
                         for l in actenemy:
                               l.toma(dmsbsm, player)

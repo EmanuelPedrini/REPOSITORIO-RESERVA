@@ -41,6 +41,7 @@ gamefont = pygame.font.SysFont(None, 40)
 pygame.display.set_icon(displaygameimage)
 clock = pygame.time.Clock()
 runninggame=True
+fullscreen = False
 
 butaoteste = interfaceButton(200, 200, 250, 250, "OI", (0, 255, 0))
 

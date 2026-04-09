@@ -1,5 +1,5 @@
 from Turnmaster import Turnmaster; from Commands import input_player; from Commands import escolhadealvo
-from THE_HOLE import full_name_with_nickname; from Bosses import boss; import Globals; from Kimeras_Data import allkimeras; 
+from Bosses import boss; import Globals; from Kimeras_Data import allkimeras; 
 from FinalBoss import finalboss
 combatfinished = False; bossbattle = False; finalbossbattle = False
 def check_alive(playercur, enemieslist):
@@ -11,12 +11,14 @@ def check_alive(playercur, enemieslist):
         return True 
 def resetbonus(player):
     player.bonus_strg = 0; player.bonus_dex = 0; player.bonus_vit = 0; player.bonus_luck = 0; 
-    player.bonus_cha = 0; player.bonus_intel = 0; player.magicdmgbonus=0; player.atkdmgbonus = 0
+    player.bonus_cha = 0; player.bonus_intel = 0; player.temporary_skillcostmodifier = 0; player.temporary_magicdmgbonus = 0
+    player.temporary_bonus_to_right = 0; player.temporary_bonus_to_left = 0; player.temporary_atkdmgbonus = 0
 
 def combat_start(player):
     player.actmana = player.mana_inicial; player.shield = player.shieldstat; resetbonus(player)
 
 def combat_end(player):
+    from THE_HOLE import full_name_with_nickname
     global bossbattle, finalbossbattle
     print("All enemies are DEAD! you WIN!")
 
@@ -127,6 +129,10 @@ def playerturn(player, actenemy, sav2):
         print("> It`s Your Turn!")
         print(f"> {player.name} actually have {player.acthp}/{player.total_max_hp} health points!")
         print(f"> You actually have [ {ppman} / {player.max_mana} ] Mana Points!")
+        if player.stunned:
+             print("You are stunned!")
+             player.stunned = False
+             return
 
         #Ações possíveis
         print("> Time to Act!\n> Actions:")
@@ -192,7 +198,10 @@ def playerturn(player, actenemy, sav2):
                 print("Sorry, thats a invalid Command.")
                 
 def enemyturn(enemy, player):
-        # print(f">It`s {enemy.name} TURN!\n>He (she) is going to...")
+        if enemy.stunned:
+             print(f"{enemy.name} is STUNNED!")
+             enemy.stunned = False
+             return
         enemy.attack(player)
         if player.acthp <=0:
             player.death()

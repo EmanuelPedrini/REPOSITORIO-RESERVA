@@ -3,6 +3,7 @@ from Skills import skill
 #     numb2 = sm.actmana
 #     return numb2
 
+
 #skills
 fireball=skill("Fireball", "You cast a giant fireball to destroy your enemies!", 14, 0, 0, 9, target="allenemies", skproperty="")
 healing= skill("Healing", "You heal your wounds", 0, 5, 0, 4, target="self", skproperty="any")
