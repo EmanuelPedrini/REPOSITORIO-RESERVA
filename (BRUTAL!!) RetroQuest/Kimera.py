@@ -9,6 +9,7 @@ from Commands import input_player
 import Globals
 from Random_Names import generate_a_random_name, generate_a_random_nickname, generate_a_random_surname
 from Mutation import allthemuts
+import copy
 
 class kimera:
     def __init__(self, name, surname, nickname, pronoun, possessive, 
@@ -461,13 +462,23 @@ class kimera:
                     slc= currentoptions[sd]
 
                     if slc in todasaspassivas:
-                        self.passives.append(slc)
-                        print(f"{slc.basename} added to your skills!")
+                        if slc not in self.passives:
+                            self.passives.append(copy.copy(slc))
+                            print(f"{slc.basename} added to your skills!")
+                        else:
+                            print("You already have this passive.")
                         break
 
                     elif slc in todasskills:
-                        self.skills.append(slc)
-                        print(f"{slc.basename} added to your skills!")
+                        for s in self.skills:
+                            if s.basename == slc.basename:
+                                s.level+=1
+                                print(f"{s.basename} leveled up! ( Level {s.level} )")
+                                break
+
+                        else:
+                            self.skills.append(copy.copy(slc))
+                            print(f"{slc.basename} added to your skills!")
                         break
 
                     elif slc in todososgatr:
@@ -608,7 +619,7 @@ class kimera:
             if rd <= 13:
                 return []
             else:
-                return [random.choice(todasaspassivas)]
+                return [copy.copy(random.choice(todasaspassivas))]
             
                 
         name = generate_a_random_name()
@@ -616,7 +627,7 @@ class kimera:
         nickname = generate_a_random_nickname()
         return cls( name, surname, nickname, pronoun, pos, 
                    random_status(), random_status(), random_status(), random_status(), random_status(), random_status(),
-                   0, 0, 0, 0, "melee", bs_skills, random_passive(), bs_mut, 0, random.randint(0, 2), 
+                   0, 0, 0, 0, "melee", copy.copy(bs_skills), random_passive(), bs_mut, 0, random.randint(0, 2), 
                    0, statusquokk
         )
 

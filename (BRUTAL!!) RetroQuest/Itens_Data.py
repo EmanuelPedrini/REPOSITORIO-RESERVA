@@ -49,7 +49,7 @@ wooden_necklace = item(name="Wooden Necklace", slot="Accessory", bonus={"gained_
 common_pendant = item(name="Common Pendant", slot="Accessory", bonus={"gained_intel": 2})
 
 #lista com todos
-todososacesssorios=[old_ring, mana_pendant, lucky_charm]
+todososacesssorios=[old_ring, mana_pendant, lucky_charm, old_necklace, copper_ring, simple_bracelet, worn_amulet, wooden_necklace, common_pendant]
 
 #lista com todos os equipamentos
 todososequipamentos = todasaarmas + todososacesssorios + todasasarmors

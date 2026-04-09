@@ -72,7 +72,7 @@ def combat_end(player):
         print(f"As the battle heat stops, you perceives your mother stills alive in the battlefield although she is most dead than alive\n" \
         f"[ {full_name_with_nickname(Queen)} ] - KILL ME!! TAKE MY PLACE!")
 
-        while Globals.gamerunning==1:
+        while True:
              print(f"[1] - KILL HER, SUBDUE YOUR OWN MOTHER AND BECAME THE NEW QUEEN. ({full_name_with_nickname(Queen)} will be REMOVED from your kimeras PERMANENTLY)")
              print(f"[2] - SAVE HER LIFE ({full_name_with_nickname(Queen)} will remain being a QUEEN and you a PRINCESS)")
 
@@ -82,11 +82,12 @@ def combat_end(player):
                   allkimeras.remove(Queen)
                   player.status = "Queen"
                   print(f"You kill and take your mother's place. That's cruel, but it's the Kimera's day-to-day")
-                  return
+                  Globals.gamerunning = 2
+                  break
              
              elif ultsss == "2":
                   print("You let your mother live and maintain the actual hierarchy!")
-                  return
+                  break
              
              else:
                   print("It's kill or not, buddy.")

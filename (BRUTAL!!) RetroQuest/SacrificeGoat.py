@@ -18,10 +18,10 @@
 # WIDTH, HEIGHT = 900, 600
 # PRINT_DELAY = 0.002
 
-# pygame.init()
-# pygame.mixer.init()
-# pygame.mixer.music.load("Music/music2.mp3")
-# pygame.mixer.music.play(-1)
+# # pygame.init()
+# # pygame.mixer.init()
+# # pygame.mixer.music.load("Music/music2.mp3")
+# # pygame.mixer.music.play(-1)
 
 # screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
 # pygame.display.set_caption("KIMERAHALLA")
@@ -236,5 +236,5 @@
 
 # # ------------------ TESTE ------------------
 # # Troque o caminho abaixo por uma imagem válida no seu PC
-# set_image("Images/imagemteste.jpg")  # <<<<<<<<<<<<<<<< substitua pela sua imagem
+# # set_image("Images/imagemteste.jpg")  # <<<<<<<<<<<<<<<< substitua pela sua imagem
 # draw(player=player)
