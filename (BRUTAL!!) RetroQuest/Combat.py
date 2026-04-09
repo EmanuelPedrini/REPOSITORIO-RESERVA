@@ -125,41 +125,44 @@ def turn_end():
 #definições de combate
 def playerturn(player, actenemy, sav2):
         global bossbattle
+
         ppman = player.actmana
+        ppantibug = player.total_max_hp
+
         print("> It`s Your Turn!")
-        print(f"> {player.name} actually have {player.acthp}/{player.total_max_hp} health points!")
+        print(f"> {player.name} actually have {player.acthp} / {ppantibug} health points!")
         print(f"> You actually have [ {ppman} / {player.max_mana} ] Mana Points!")
+
+        Ataque_Basico_Nao_Disponivel = False
+
         if player.stunned:
              print("You are stunned!")
              player.stunned = False
              return
 
         #Ações possíveis
-        print("> Time to Act!\n> Actions:")
-        print("[1] - BASIC ATTACK")
-
-        for i, ski in enumerate(player.skills):
-            print(f"[{i+2}] - {ski.basename}")
-        ataquebasicoporturno = False
-
-        #Escolha do player
         while Globals.gamerunning == 1:
-            choice = input_player(player, actenemy)
-
-            if not isinstance(choice, str):
-                return
-            if choice =="1":
-                if ataquebasicoporturno==True:
-                    print("You already used your basic attack this turn!")
-                    continue
+             print(f"> HP: {player.acthp} / {player.total_max_hp} ")
+             print(f"> MP: {player.actmana} / {player.max_mana} ")
+             print("> Time to Act!\n> Actions:")
+             print("[1] - BASIC ATTACK")
+             for i, ski in enumerate(player.skills):
+                  print(f"[{i+2}] - {ski.basename} ( {ski.cost} Mana )")
+                  
+             choice = input_player(player, actenemy)     
+             if choice =="1":
+                    if Ataque_Basico_Nao_Disponivel:
+                         print("You already used your basic attack this turn!")
+                         continue
                     
-                else: 
+                    else: 
                         target = escolhadealvo(player, actenemy)
-                        if target==None:
+                        if target == None:
                              continue
+                        
                         if target.acthp > 0:
                             player.basicattack(target, player)
-                            ataquebasicoporturno=True
+                            Ataque_Basico_Nao_Disponivel = True
 
                         if target.acthp <= 0:
                             if target in actenemy:
@@ -169,33 +172,32 @@ def playerturn(player, actenemy, sav2):
                                  break
                             continue
             
-            elif choice.isdigit():
-                #calculo pra determinar a skill na posição
-                sedex= int(choice) - 2
-
-                #verificando se o número está nas skills do PLAYER
-                if 0 <= sedex < len(player.skills):
-
-                    skill = player.skills[sedex] 
-
-                    skill.use(player,escolhadealvo,actenemy)
-                    conf = check_alive(player, sav2)
-
-                    if conf:
-                         break
+             elif choice.isdigit():
+                    sedex= int(choice) - 2
+                       
+                    if 0 <= sedex < len(player.skills):
+                         skill = player.skills[sedex] 
+                         skill.use(player,escolhadealvo,actenemy)
+                         conf = check_alive(player, sav2)
+                         if conf:
+                              break
                     
-                #se n for uma skill do player, ou n estiver nas skills dele
-                else:
-                    print("Sorry, that is a invalid Ability.")
-                    continue
-            #terminando seu turno
-            elif choice == "endturn" or choice == "et":
-                print(f"{player.name} ended {player.possessive} turn!")
-                player_turn_end(player)
-                break
+                    else:
+                         print("Sorry, that is a invalid Ability.")
+                         continue
+                       
+             elif choice == "look" or choice == "lk":
+                    analize_choice = input("Which skill you want to look closely?")
+                    if analize_choice.isdigit():
+                         sdx = int(analize_choice) - 1
 
-            else:
-                print("Sorry, thats a invalid Command.")
+             elif choice in ("endturn", "et"):
+                    print(f"{player.name} ended {player.possessive} turn!")
+                    player_turn_end(player)
+                    break
+
+             else:
+               print("Sorry, thats a invalid Command.")
                 
 def enemyturn(enemy, player):
         if enemy.stunned:
