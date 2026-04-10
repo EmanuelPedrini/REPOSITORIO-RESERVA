@@ -73,7 +73,10 @@ class kimera:
         self.dodge = dodge
         self.vampirism = vampirism
         self.thorns = thorns
-        self.armor = armor
+
+        self.armor_base = armor
+        self.temporary_armor_base = 0
+
         self.shieldstat = shieldstat
         self.bonus_crit_chance = 0
 
@@ -143,6 +146,10 @@ class kimera:
     
     #TOTAIS
     #TOTAL STRENGTH
+
+    @property
+    def armor(self):
+        return self.armor_base + self.temporary_armor_base
 
     @property
     def total_atkdmgbonus(self):
