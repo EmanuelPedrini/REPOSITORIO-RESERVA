@@ -24,14 +24,14 @@ todasaarmas=[rustysword, iron_sword, butchers_cleaver, crossbow, throwknife,boom
 #armors
 torn_clothes = item("Torn Clothes", "Armor", bonus={"thorns": 3} )
 leather_armor = item("Leather Armor", "Armor", bonus={"gained_vit": 2} )
-chainmail = item("Chainmail", "Armor", bonus={"armor": 3})
+chainmail = item("Chainmail", "Armor", bonus={"base_armor": 3})
 
-iron_armor = item(name="Iron Armor", slot="Armor", bonus={"armor": 5, "gained_vit": 2})
-knight_armor = item(name="Knight Armor", slot="Armor", bonus={"armor": 3, "gained_vit": 2, "gained_strg": 2})
-shadow_cloak = item(name="Shadow Cloak", slot="Armor", bonus={"armor": 4, "gained_luck": 3})
-flame_robe = item(name="Flame Robe", slot="Armor", bonus={"armor": 3, "gained_intel": 4})
-thunder_plate = item(name="Thunder Plate", slot="Armor", bonus={"armor": 6, "gained_strg": 1})
-frozen_mail = item(name="Frozen Mail", slot="Armor", bonus={"armor": 4, "gained_vit": 3})
+iron_armor = item(name="Iron Armor", slot="Armor", bonus={"base_armor": 5, "gained_vit": 2})
+knight_armor = item(name="Knight Armor", slot="Armor", bonus={"base_armor": 3, "gained_vit": 2, "gained_strg": 2})
+shadow_cloak = item(name="Shadow Cloak", slot="Armor", bonus={"base_armor": 4, "gained_luck": 3})
+flame_robe = item(name="Flame Robe", slot="Armor", bonus={"base_armor": 3, "gained_intel": 4})
+thunder_plate = item(name="Thunder Plate", slot="Armor", bonus={"base_armor": 6, "gained_strg": 1})
+frozen_mail = item(name="Frozen Mail", slot="Armor", bonus={"base_armor": 4, "gained_vit": 3})
 
 #lista com todas as armaduras
 todasasarmors=[torn_clothes, leather_armor, chainmail, iron_armor, knight_armor, shadow_cloak,flame_robe,thunder_plate, frozen_mail]

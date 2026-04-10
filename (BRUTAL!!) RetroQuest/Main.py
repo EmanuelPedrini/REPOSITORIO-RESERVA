@@ -8,7 +8,7 @@ from Tutorial import tutorial, full_name_with_nickname
 from Kimeras_Data import actualize_princesses, actualize_queen
 from Globals import looktheirteeths
 from Globals import banned_from_twitter
-# import SacrificeGoat
+import SacrificeGoat
 
 def run_expedition():
     actualize_princesses(allkimeras)
