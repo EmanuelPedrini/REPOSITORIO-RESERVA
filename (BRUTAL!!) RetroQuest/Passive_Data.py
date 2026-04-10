@@ -20,7 +20,7 @@ def adaptive(kimera):
 incansavel= passive("Tireless", "+1 strength when you take damage", strgonhit, "on_damage")
 professionalconjurer=passive("Professional Conjurer", "+1 intel when you use a spell", intelonspell, "on_spell")
 HardMind= passive("Hard Mind", "+1 intel when you take damage", intelonhit, "on_damage")
-Adaptive = passive()
+# Adaptive = passive()
 # Protagonista = passive("Protagonist","Gain +30% more XP",)
 # Ace = passive("Ace", "+25% - Crit Chance",)
 # Killer = passive("Killer","Gain +25% Crit Chance when killing a enemy")

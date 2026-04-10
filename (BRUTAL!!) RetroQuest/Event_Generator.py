@@ -44,7 +44,7 @@ def gerador_de_eventos(player):
         Globals.bosscall = "notcalled"
         if Globals.act ==1:
             boss = copy.deepcopy(random.choice(bossesact1))
-            floorboss=[ boss ]
+            floorboss = [ boss ]
 
         elif Globals.act ==2:
             boss = copy.deepcopy(random.choice(finalbosses))
@@ -52,7 +52,6 @@ def gerador_de_eventos(player):
 
         print(f"{boss.name} is going for YOU!\n HA!\n HAHA!\n HAHAHA!\n")
         return(67, floorboss)
-
 
     elif escolhadeevento <= 25:
         return (1, random.choice(badevents))
@@ -65,6 +64,9 @@ def gerador_de_eventos(player):
             copy.deepcopy(e) 
             for e in random.sample(Globals.actualpool, k=min(quantidadeinimigos, len(Globals.actualpool)))
             ]
+        for e in actenemy:
+            e.apply_danger()
+
         return (2, actenemy)
     
     elif 50 < escolhadeevento <=60:

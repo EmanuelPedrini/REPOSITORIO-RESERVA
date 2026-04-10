@@ -16,6 +16,7 @@ def run_expedition():
     (print("Welcome to KIMERAHALLA! if want to go back to THE HOLE, type [EXIT]"))
 
     Globals.act = 1
+    Globals.globaldanger = 0
     Globals.endofarun = False
     Globals.bosscall = "notcalled"
 

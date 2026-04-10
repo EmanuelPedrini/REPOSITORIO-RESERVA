@@ -12,7 +12,7 @@ def nothing(player):
 def avoid(player):
     roll= random.randint(1,20) + player.total_dex
     if roll < 12:
-        dmg=random.randint(4,7)*globaldangermathsoftcap
+        dmg=random.randint(4,7)
         player.toma(int(dmg))
         print(f"You accidentaly stepped on the trap and taked {int(dmg)} damage!")
     else:
@@ -21,7 +21,7 @@ def avoid(player):
 def drinkfountain(player):
     roll= random.randint(1,20) + player.total_luck
     if roll > 7:
-        hl= random.randint(6,10)*globaldangermathsoftcap
+        hl= random.randint(6,10)
         player.heal(int(hl))
         print(f"The water have a taste of marshmallows and honey, you fell your body get refilled with jovial energy!")
     elif roll<=7:

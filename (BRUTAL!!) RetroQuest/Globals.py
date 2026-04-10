@@ -1,7 +1,6 @@
 
-globaldanger = 1
-globaldangercalc = (0.5*(globaldanger + 1))
-globaldangermathsoftcap= (1+(globaldanger*5/((globaldanger*5)+15)))
+globaldanger = 0
+globaldangercalc = (1 + 0.03 * globaldanger ** 1.8)
 gamerunning = 0
 bosscall = "notcalled"
 

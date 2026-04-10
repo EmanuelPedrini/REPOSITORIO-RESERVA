@@ -9,13 +9,19 @@ class enemy:
 
         self.name = name
         #hp
-        self.totalmaxhp = int(round(totalmaxhp * Globals.globaldangercalc))
-        self.acthp = self.totalmaxhp
+        self.base_totalmaxhp = totalmaxhp
+        self.base_atk = atk
+        self.dodge = dodge
+        self.base_centsondeath = centsondeath
+        self.base_xpondeath = xpondeath
 
-        self.atk = int(round(atk * Globals.globaldangercalc))
-        self.dodge = int(dodge)
-        self.centsondeath = int(centsondeath)
-        self.xpondeath = int(xpondeath)
+
+        self.totalmaxhp = int(totalmaxhp * Globals.globaldangercalc)
+        self.acthp = self.totalmaxhp
+        self.atk = int(atk * Globals.globaldangercalc)
+        self.centsondeath = int(centsondeath // Globals.globaldangercalc)
+        self.xpondeath = int(xpondeath // Globals.globaldangercalc)
+
 
         #secondary atributes
         self.vampirism = vampirism
@@ -41,6 +47,13 @@ class enemy:
 
         #self.dead=False
     #Ancora 3
+    def apply_danger(self):
+        scale = Globals.globaldangercalc
+        self.totalmaxhp = int(self.base_totalmaxhp * scale)
+        self.acthp = self.totalmaxhp
+        self.atk = int(self.base_atk * scale)
+        self.centsondeath = int(self.base_centsondeath / scale)
+        self.xpondeath = int(self.base_xpondeath / scale)
 
     def toma(self, damage, player):
         if self.cursed:
@@ -84,9 +97,9 @@ class enemy:
 
     def death(self, player):
         if self.acthp <= 0:
-            centsg = int(random.randint(self.centsondeath, self.centsondeath*3) * (1 + Globals.globaldanger   * 0.4))
-            xpg = int(random.randint(self.xpondeath, self.xpondeath*3) * (1 + Globals.globaldanger   * 0.6))
-            randomitemgain=random.randint(1, 100) + player.total_luck
+            centsg = int(random.randint(self.centsondeath, self.centsondeath * 3))
+            xpg = int(random.randint(self.xpondeath, self.xpondeath * 3))
+            randomitemgain = random.randint(1, 100) + player.total_luck
             if randomitemgain < 75:
                 maxitemgain=1
             else:

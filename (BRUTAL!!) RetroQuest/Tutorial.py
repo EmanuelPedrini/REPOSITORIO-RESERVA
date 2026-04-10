@@ -3,6 +3,7 @@ from Kimera import kimera
 from THE_HOLE import full_name_with_nickname, lookingsmaching
 from Kimeras_Data import allkimeras
 from Globals import looktheirteeths
+
 listatmp =[]
 for i in range(3):
     kimimpossible = kimera.randomkimera("Queen")

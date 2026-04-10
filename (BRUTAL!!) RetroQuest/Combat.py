@@ -40,6 +40,7 @@ def combat_end(player):
             ps.passiveactivationtrigger(player)
 
     resetbonus(player)
+    Globals.globaldanger += 1
 
     while Globals.gamerunning==1:
         if player.xp >= player.xptonext:
@@ -110,6 +111,7 @@ def combat_end(player):
     elif bossbattle:
          if Globals.act ==1:
               Globals.act = 2
+              Globals.globaldanger = 0
 
 def player_turn_start():
      pass
@@ -251,6 +253,7 @@ def combat(player, enemies):
     sav = enemies
     oncombat=[player] + enemies
     tm = Turnmaster(oncombat)
+
     combat_start(player)
     boss_enemy = next((e for e in enemies if isinstance(e, boss)), None)
     final_enemy = next((e for e in enemies if isinstance(e, finalboss)), None)
@@ -274,6 +277,7 @@ def combat(player, enemies):
     
     else:
          print("TIME TO DIE!, from the tar of the void some enemies arise!")
+         print(f"DANGER LEVEL: {Globals.globaldanger}")
 
     print("ACTION QUEUE:\n")
     savis = (player.total_max_hp)
