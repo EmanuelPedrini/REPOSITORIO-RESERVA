@@ -8,12 +8,13 @@ from Tutorial import tutorial, full_name_with_nickname
 from Kimeras_Data import actualize_princesses, actualize_queen
 from Globals import looktheirteeths
 from Globals import banned_from_twitter
-import SacrificeGoat
+# import SacrificeGoat
 
 def run_expedition():
     actualize_princesses(allkimeras)
     actualize_queen(allkimeras)
     (print("Welcome to KIMERAHALLA! if want to go back to THE HOLE, type [EXIT]"))
+
 
     Globals.act = 1
     Globals.globaldanger = 0
@@ -62,7 +63,8 @@ def run_expedition():
         return
     
     # pgterminal.current_player = player
-    
+
+    print("\033c", end="")
     print(f"Congrats! You chosed {full_name_with_nickname(player)}!")
     player.acthp = player.total_max_hp
 

@@ -414,9 +414,9 @@ class kimera:
         print(f"> {self.name} healed [ {amount} ] Hp")
         if self.acthp > self.total_max_hp:
             self.acthp = self.total_max_hp
-            for pas in self.passives:
-                if pas.trigger=="on_heal":
-                    pas.passiveactivationtrigger(self)
+        for pas in self.passives:
+            if pas.trigger=="on_heal":
+                pas.passiveactivationtrigger(self)
     
     def gain_xp(self, xpamount):
         self.xp+=xpamount

@@ -187,7 +187,6 @@ comandosglobais={
 # negocio para ler input sempe
 def input_player(player, actenemy=None):
     while True:
-        ()
         if Globals.gamerunning!=1:
             return None
         

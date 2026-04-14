@@ -15,8 +15,10 @@ def avoid(player):
         dmg=random.randint(4,7)
         player.toma(int(dmg))
         print(f"You accidentaly stepped on the trap and taked {int(dmg)} damage!")
+        print("")
     else:
         print("You avoided the trap in a involuntary reflex!")
+        print("")
 
 def drinkfountain(player):
     roll= random.randint(1,20) + player.total_luck
@@ -24,8 +26,10 @@ def drinkfountain(player):
         hl= random.randint(6,10)
         player.heal(int(hl))
         print(f"The water have a taste of marshmallows and honey, you fell your body get refilled with jovial energy!")
+        print("")
     elif roll<=7:
         print("A marshmallow knight appears from the bushes before you can drink from the fountain, ainda starts a combat!")
+        print("")
         actenemy=[ copy.deepcopy(marshmallowknight) ]
         combat(player, actenemy)
 

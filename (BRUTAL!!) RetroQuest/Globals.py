@@ -36,29 +36,8 @@ def reds(who):
     rdss = min(reduction, 0.90)
     return rdss
 
-# import time
-# import builtins
-
-# def slowprint(*args, sep=" ", end="\n", delay=0.00001, line_delay=0.2, flush=True):
-#     text = sep.join(map(str, args)) + end
-#     time.sleep(delay)
-
-        
-#     time.sleep(line_delay)
-
-# print = builtins.print
-# builtins.print = slowprint
-
-# import builtins
-# import msvcrt
-
-# def safe_input(prompt=""):
-#     while msvcrt.kbhit():
-#         msvcrt.getch()
-#     return builtins._original_input(prompt)
-
-# builtins._original_input = builtins.input
-# builtins.input = safe_input
+def clear():
+    print("\033c", end="")
 
 def looktheirteeths(analized):
     save = (analized.total_max_hp)

@@ -1,7 +1,9 @@
 from Turnmaster import Turnmaster; from Commands import input_player; from Commands import escolhadealvo
 from Bosses import boss; import Globals; from Kimeras_Data import allkimeras; 
 from FinalBoss import finalboss
+
 combatfinished = False; bossbattle = False; finalbossbattle = False
+
 def check_alive(playercur, enemieslist):
     global combatfinished
     alive = [e for e in enemieslist if e.acthp > 0]
@@ -9,6 +11,7 @@ def check_alive(playercur, enemieslist):
         combatfinished=True
         combat_end(playercur)
         return True 
+    
 def resetbonus(player):
     player.bonus_strg = 0; player.bonus_dex = 0; player.bonus_vit = 0; player.bonus_luck = 0; 
     player.bonus_cha = 0; player.bonus_intel = 0; player.temporary_skillcostmodifier = 0; player.temporary_magicdmgbonus = 0
@@ -47,6 +50,7 @@ def combat_end(player):
                player.level_system()
         else:
             break
+     
 
     if Globals.gained_kimeras_battle:
             for wk in Globals.gained_kimeras_battle[:]:
@@ -143,18 +147,20 @@ def playerturn(player, actenemy, sav2):
              player.stunned = False
              return
 
-        #Ações possíveis
         while Globals.gamerunning == 1:
-          #    print(f"> HP: {player.acthp} / {player.total_max_hp} ")
-          #    print(f"> MP: {player.actmana} / {player.max_mana} ")
              print("> Time to Act!\n> Actions:")
-             print("[1] - BASIC ATTACK")
+
+             if not Ataque_Basico_Nao_Disponivel:
+                  print("[1] - BASIC ATTACK")
+             else:
+                  print("[1] - BASIC ATTACK ( USED )")
+
              for i, ski in enumerate(player.skills):
                   if ski.cost > 0:
                     print(f"[{i+2}] - {ski.basename} ( {ski.cost} Mana )")
                   else:
                     print(f"[{i+2}] - {ski.basename}")
-                  
+
              choice = input_player(player, actenemy)     
              if choice =="1":
                     if Ataque_Basico_Nao_Disponivel:
@@ -222,7 +228,7 @@ def playerturn(player, actenemy, sav2):
                          else:
                               print("Thats a invalid skill.")
                     else:
-                         print("Please, type a valid choice.")
+                         print("Please, type a valid choice. ")
                               
 
 
@@ -278,15 +284,6 @@ def combat(player, enemies):
     else:
          print("TIME TO DIE!, from the tar of the void some enemies arise!")
          print(f"DANGER LEVEL: {Globals.globaldanger}")
-
-    print("ACTION QUEUE:\n")
-    savis = (player.total_max_hp)
-    print(f"- {player.name} ( {player.acthp} / {savis})")
-    print("")
-    for e in enemies:
-            if e.acthp > 0:
-                print(f"- {e.name} ( {e.acthp} / {e.totalmaxhp} HP )")
-            print("")
             
     #essa é a parte que define o loop do combat
     while Globals.gamerunning==1:

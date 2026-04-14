@@ -48,12 +48,14 @@ def choice():
     allkimeras.append(escolhida)
 
     print(f"You choose {full_name_with_nickname(escolhida)}")
+    print("\033c", end="")
     print("OK, now choose some Princess!\n")
 
     escolhido01 = big_ass_choice(listasuitors)
     escolhido01.age += 3
     allkimeras.append(escolhido01)
     print(f"You choose {full_name_with_nickname(escolhido01)}")
+    print("\033c", end="")
     print("OK, NOW choose another princess!\n")
 
     rest=[]
@@ -65,7 +67,7 @@ def choice():
     escolhido02.age += 3
     allkimeras.append(escolhido02)
     print(f"You choose {full_name_with_nickname(escolhido02)}")
-
+    print("\033c", end="")
     print("")
 
     print("GOOD LUCK! BYE BYE")
@@ -91,6 +93,7 @@ def tutorial():
     print("Yeah, you can send them in expeditions to collect things for you")
     print("Very convinient, RIGHT?")
     print("So in a act of of kindness, i'll give you some of my kimeras")
+
 
 
     choice()

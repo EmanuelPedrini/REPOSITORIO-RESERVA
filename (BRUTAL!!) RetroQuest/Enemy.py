@@ -9,12 +9,12 @@ class enemy:
 
         self.name = name
         #hp
+
         self.base_totalmaxhp = totalmaxhp
         self.base_atk = atk
         self.dodge = dodge
         self.base_centsondeath = centsondeath
         self.base_xpondeath = xpondeath
-
 
         self.totalmaxhp = int(totalmaxhp * Globals.globaldangercalc)
         self.acthp = self.totalmaxhp

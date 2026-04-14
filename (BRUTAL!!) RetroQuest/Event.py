@@ -7,17 +7,20 @@ class event:
         self.choices=choices
 
     def trigger(self, player):
-        #apresentação do evento
-        print(f"EVENT: {self.name}")
-        print(self.text)
         
-        for i, (optiontext, _) in enumerate(self.choices,1):
-             print(f"{i} - {optiontext}")
         while Globals.gamerunning==1:
-            ()
+
+            print(f"EVENT: {self.name}")
+            print(self.text)
+
+            for i, (optiontext, _) in enumerate(self.choices,1):
+                print(f"{i} - {optiontext}")
+
             choice = input_player(player)
+
             if not isinstance(choice, str):
                 return
+            
             if choice.isdigit():
                     
                     choice= int(choice)-1
@@ -30,4 +33,5 @@ class event:
 
                          break
                     
+            print("\033c", end="")
             print("Invalid Option")
