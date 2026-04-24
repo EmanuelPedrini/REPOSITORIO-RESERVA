@@ -16,6 +16,8 @@ gained_xp_battle = 0
 gained_itens_battle = []
 gained_kimeras_battle = []
 
+Language = None
+
 
 # currentplayer = None
 

@@ -72,8 +72,21 @@ def choice():
 
     print("GOOD LUCK! BYE BYE")
     Globals.gamerunning = 1
-
+def Choose_Language():
+    Language_List = ["Português", "English"]
+    while True:
+        print("Choose your language:")
+        for number, language  in enumerate(Language_List):
+             print(f"[{number+1}] - {language}")
+        Ch = input("> ")
+        if Ch.isdigit():
+            Ch_Lang = int(Ch) - 1
+            if 0<= Ch_Lang < len(Language_List):
+                 Chosed_Language = Language_List[Ch_Lang]
+                 print(Chosed_Language)
+                 return Chosed_Language
 def tutorial():
+    # Globals.Language = Choose_Language()
     print("Hello! I see it's your first time, playing so i need to teach you how things work here")
     print("First of all you gonna need a MATRIARCH for your KIMERA family!")
     print("Uh WHAT???!!!")
@@ -93,7 +106,6 @@ def tutorial():
     print("Yeah, you can send them in expeditions to collect things for you")
     print("Very convinient, RIGHT?")
     print("So in a act of of kindness, i'll give you some of my kimeras")
-
 
 
     choice()
