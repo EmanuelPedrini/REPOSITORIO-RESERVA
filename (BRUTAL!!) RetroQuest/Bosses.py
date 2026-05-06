@@ -4,3 +4,4 @@ class boss(enemy):
         super().__init__(name, totalmaxhp, atk, vampirism, thorns, dodge, centsondeath, xpondeath, atkdist)
         self.name = name
         self.intro = intro
+        self.bora = "bill"
