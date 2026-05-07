@@ -18,6 +18,17 @@ bloodfeast=skill("Blood Feast", "You drink the blood of your enemies!", 6, 0, 0,
 teleport=skill("Teleport","You teleport above a enemy and cause damage.", 9, 0, 0, 5, target="enemy", skproperty="any")
 arranhar=skill("Scratch", "Scratch the skin of your enemies!",4, 0, 0, 2, target="enemy", skproperty="any")
 Manaboy=skill("Mana Cannibal", "Cause a massive damage to all enemies based on half of your actual mana", 0, 0, 0, 0, target="allenemies", skproperty="DamageBasedOnMana")
-
+iceblast = skill("Ice Blast", "A freezing attack that may slow the enemy.", 7, 0, 0, 5, target="enemy", skproperty="slow")
+poisoncloud = skill("Poison Cloud", "Release a toxic cloud damaging all enemies over time.", 5, 0, 0, 6, target="allenemies", skproperty="poison")
+lifedrain = skill("Life Drain", "Steal life from your enemy.", 6, 0, 0, 5, target="enemy", skproperty="HealOnHit")
+earthshield = skill("Earth Shield", "Raise a protective barrier of earth.", 0, 0, 5, 4, target="self", skproperty="buff_defense")
+berserk = skill("Berserk", "Increase damage but reduce defense.", 9, 0, -2, 4, target="self", skproperty="buff_attack")
+frostnova = skill("Frost Nova", "Freeze all enemies around you.", 6, 0, 0, 7, target="allenemies", skproperty="freeze")
+shadowstrike = skill("Shadow Strike", "A fast attack with high critical chance.", 8, 0, 0, 4, target="enemy", skproperty="crit")
+manashield = skill("Mana Shield", "Convert mana into protective shield.", 0, 0, 4, 3, target="self", skproperty="mana_shield")
+explosion = skill("Explosion", "A powerful explosion that damages everyone including yourself.", 13, 0, 0, 8, target="allenemies", skproperty="selfdamage")
+holy_light = skill("Holy Light", "A powerful healing spell.", 0, 12, 0, 8, target="self", skproperty="any")
+curse = skill("Curse", "Weaken the enemy reducing their attack power.", 4, 0, 0, 5, target="enemy", skproperty="debuff_attack")
+windslash = skill("Wind Slash", "Fast wind attack that hits all enemies.", 6, 0, 0, 4, target="allenemies", skproperty="any")
 #lista de todas as skills
-todasskills = [fireball,healing,satorogojonaooooo, lightning, magicspark, donothing, bite, bloodfeast, teleport, arranhar, manaflow, Manaboy]
+todasskills = [holy_light,curse,windslash,fireball,iceblast,poisoncloud,lifedrain,earthshield,berserk,frostnova,shadowstrike,manashield,explosion,healing,satorogojonaooooo, lightning, magicspark, donothing, bite, bloodfeast, teleport, arranhar, manaflow, Manaboy]

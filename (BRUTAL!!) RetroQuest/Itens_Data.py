@@ -9,7 +9,6 @@ longbow=item(name="Long Bow", slot="Weapon", bonus={"atkdmgbonus": 4, "gained_de
 boomerang=item(name="Boomerang", slot="Weapon", bonus={"atkdmgbonus": 2, "gained_dex": 1}, atkform="ranged")
 brassknuckles=item(name="Brass Knuckles", slot="Weapon", bonus={"atkdmgbonus": 3, "gained_strg": 2}, atkform="melee")
 cajado=item(name="Magic Staff", slot="Weapon", bonus={"gained_intel": 4}, atkform="ranged")
-
 steel_sword = item(name="Steel Sword", slot="Weapon", bonus={"atkdmgbonus": 6, "gained_strg": 1}, atkform="melee")
 axe = item(name="Axe", slot="Weapon", bonus={"atkdmgbonus": 5, "gained_strg": 2}, atkform="melee")
 dagger = item(name="Dagger", slot="Weapon", bonus={"atkdmgbonus": 4, "gained_luck": 4}, atkform="melee")
@@ -25,7 +24,6 @@ todasaarmas=[rustysword, iron_sword, butchers_cleaver, crossbow, throwknife,boom
 torn_clothes = item("Torn Clothes", "Armor", bonus={"thorns": 3} )
 leather_armor = item("Leather Armor", "Armor", bonus={"gained_vit": 2} )
 chainmail = item("Chainmail", "Armor", bonus={"base_armor": 3})
-
 iron_armor = item(name="Iron Armor", slot="Armor", bonus={"base_armor": 5, "gained_vit": 2})
 knight_armor = item(name="Knight Armor", slot="Armor", bonus={"base_armor": 3, "gained_vit": 2, "gained_strg": 2})
 shadow_cloak = item(name="Shadow Cloak", slot="Armor", bonus={"base_armor": 4, "gained_luck": 3})
@@ -40,7 +38,6 @@ todasasarmors=[torn_clothes, leather_armor, chainmail, iron_armor, knight_armor,
 old_ring = item("Old Ring", "Accessory",bonus={"gained_strg": 2})
 mana_pendant = item("Mana Pendant", "Accessory",bonus={"gained_intel": 2} )
 lucky_charm = item("Lucky Charm", "Accessory", bonus={"gained_luck": 2})
-
 old_necklace = item(name="Old Necklace", slot="Accessory", bonus={"gained_hp": 2})
 copper_ring = item(name="Copper Ring", slot="Accessory", bonus={"gained_strg": 1, "gained_luck": 1})
 simple_bracelet = item(name="Simple Bracelet", slot="Accessory", bonus={"gained_cha": 2})
