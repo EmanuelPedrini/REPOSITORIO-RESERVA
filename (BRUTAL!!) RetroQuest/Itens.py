@@ -23,7 +23,7 @@ class item:
         if self.manag > 0:
             player.actmana = min(player.maxmana, player.actmana + self.manag)
             print(f"{player.name} recovered {self.manag} mana!")
-
+  
         # DAMAGE
         if self.damageg > 0 and target:
             target.toma(self.damageg, player)
