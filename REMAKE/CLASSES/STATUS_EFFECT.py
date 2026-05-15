@@ -1,4 +1,4 @@
 #Classe
-class _PASSIVE:
+class STATUS_EFFECT:
     def __init__(self):
         pass
