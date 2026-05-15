@@ -42,6 +42,8 @@ class _ATTRIBUTE(Enum):
     THORNS = 16
     NATURAL_SHIELD = 17
     FAITH = 18
+    COUNTERATTACK = 19
+    EXTRA_ATTACKS = 20
     
     
 

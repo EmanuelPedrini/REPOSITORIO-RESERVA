@@ -15,6 +15,11 @@ class COMBAT_DATA:
         return random.randint(1, 100) <= Entity_Critical_Chance
     
     @staticmethod
+    def Counter_Attack_Roll(Target):
+        Entity_Counter = Target.Total_Attribute(_ATTRIBUTE.COUNTERATTACK)
+        return random.randint(1, 100) <= Entity_Counter
+    
+    @staticmethod
     def Calculate_Damage(Attacker):
         #CALCS
         Attacker_Distance = Attacker.Current_Attack_Distance
@@ -42,7 +47,7 @@ class COMBAT_DATA:
         return Static_Damage + Random_Damage
     
     @staticmethod
-    def Basic_Attack(Attacker, Target):
+    def Basic_Attack(Attacker, Target, Can_Counter: bool = True):
         if COMBAT_DATA.Attack_Roll(Target):
             Total_Damage_Amount = COMBAT_DATA.Calculate_Damage(Attacker)
             
@@ -64,6 +69,14 @@ class COMBAT_DATA:
             if Target_Thorns > 0:
                 Attacker.Take_Damage(DAMAGE(Target_Thorns, Target.Thorns_Type, Target))
             
+            if Can_Counter:
+                if COMBAT_DATA.Counter_Attack_Roll(Target):
+                    COMBAT_DATA.Basic_Attack(
+                        Target,
+                        Attacker,
+                        Can_Counter = False
+                    )
+                
             #TESTES TEMPORÁRIOS!!!
             print(f"{Attacker.Name} attacked {Target.Name}, causing {Damage_Taken_After_Resistances} damage! \n{Target.Name} HP: {Target.Actual_Health} / {Target.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)}")
             return True
@@ -83,7 +96,14 @@ class COMBAT_SYSTEM:
         Teaming = [ Enemy for Enemy in Enemy_Team if Enemy.Actual_Health > 0 ]
         if Teaming:
             return Teaming
-        return None
+        return []
+    
+    def Get_Ally_Team(self, Attacker):
+        Ally_Team = self.Team_A if Attacker in self.Team_A else self.Team_B
+        Teaming = [ Ally for Ally in Ally_Team if Ally.Actual_Health > 0 ]
+        if Teaming:
+            return Teaming
+        return []
 
     def Team_Dead(self, Team) -> bool:
         return all(e.Actual_Health <= 0 for e in Team)
