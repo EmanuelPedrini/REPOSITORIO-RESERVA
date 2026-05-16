@@ -45,8 +45,6 @@ class _ATTRIBUTE(Enum):
     COUNTERATTACK = 19
     EXTRA_ATTACKS = 20
     
-    
-
 class _MODIFIER_TYPE(Enum):
     ADDITIVE = 0
     MULTIPLICATIVE = 1
@@ -96,4 +94,9 @@ class _DIRECTIONS(Enum):
     DOWN = 1
     LEFT = 2
     RIGHT = 3
-    
+
+class _SITE(Enum):
+    COMBAT = 0
+    BAD_EVENT = 1
+    NEUTRAL_EVENT = 2
+    GOOD_EVENT = 3

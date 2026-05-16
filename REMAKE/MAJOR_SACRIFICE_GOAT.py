@@ -1,11 +1,11 @@
 from CLASSES.ENTITY import ENTITY
 from SYSTEMS.Combat_System import COMBAT_DATA, COMBAT_SYSTEM
 from PUBLIC.Public_Enums import _GENDER, _ATTACK_DISTANCE, _DAMAGE_TYPE, _ATTRIBUTE, _TYPE_RESISTANCES, _SIDE
-from CLASSES.SKILLS import Fireball
+from CLASSES.SKILLS import Fireball, Vampiric_Bite
 Joana_Mata_Galinha = ENTITY("Joana Mata-Galinha", 
                             _GENDER.FEMALE,
                             6, 7, 2, 3, 1, 2,
-                            [], [], [], 
+                            [Fireball, Vampiric_Bite], [], [], 
                             _ATTACK_DISTANCE.MELEE,
                             _DAMAGE_TYPE.BLUDGEONING,
                             Side=_SIDE.PLAYER)
@@ -21,14 +21,14 @@ Joao_Mata_Galinha = ENTITY("João Mata-Galinha",
 Mariazinha_Mata_Frango = ENTITY("Mariazinha Mata-Frango", 
                             _GENDER.FEMALE,
                             2, 2, 2, 2, 2, 2,
-                            [], [], [], 
+                            [Fireball, Vampiric_Bite], [], [], 
                             _ATTACK_DISTANCE.RANGED,
                             _DAMAGE_TYPE.BLUDGEONING)
 
 Cassiano_Terrível = ENTITY("Cassiano Terrível", 
                             _GENDER.MALE,
                             1, 5, 3, 7, 7, 7,
-                            [Fireball], [], [], 
+                            [Fireball, Vampiric_Bite], [], [], 
                             _ATTACK_DISTANCE.MELEE,
                             _DAMAGE_TYPE.BLUDGEONING)
 
