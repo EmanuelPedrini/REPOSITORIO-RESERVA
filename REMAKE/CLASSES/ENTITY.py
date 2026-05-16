@@ -1,7 +1,7 @@
 from CLASSES.SKILLS import _SKILL
 from CLASSES.PASSIVES import _PASSIVE
 from CLASSES.MUTATIONS import _MUTATIONS
-from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _TYPE_RESISTANCES, _MODIFIER_TYPE, _GENDER, _EQUIPMENT_SLOTS, DAMAGE_RESISTANCE_MAP, _DAMAGE_TYPE
+from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _TYPE_RESISTANCES, _MODIFIER_TYPE, _GENDER, _SIDE, _EQUIPMENT_SLOTS, DAMAGE_RESISTANCE_MAP, _DAMAGE_TYPE
 from PUBLIC.Public_Classes import DAMAGE
 from PUBLIC.Public_Standards import Conversions, Clamp
 # Só rodar pela raiz do projeto que essa porra para de chorar por causa de import
@@ -11,12 +11,14 @@ class ATTRIBUTE_MODIFIER():
                  Attribute:_ATTRIBUTE | _TYPE_RESISTANCES, 
                  Operation: _MODIFIER_TYPE, 
                  Value: float, 
-                 Source):
+                 Source,
+                 Duration):
         
         self.Attribute: _ATTRIBUTE | _TYPE_RESISTANCES = Attribute
         self.Operation: _MODIFIER_TYPE = Operation
         self.Value: float = Value
         self.Source = Source
+        self.Duration = Duration
 
 class ENTITY:
     def __init__(self,
@@ -33,11 +35,13 @@ class ENTITY:
                  Mutations: list[_MUTATIONS],
                  Attack_Distance: _ATTACK_DISTANCE,
                  Attack_Type: _DAMAGE_TYPE,
+                 Side: _SIDE = _SIDE.ENEMY
                  ):
         
         # BASIC INFORMATION
         self.Name: str = Name
         self.Gender: _GENDER = Gender
+        self.Side: _SIDE = Side
 
         self.ATTRIBUTES = {
             _ATTRIBUTE.MUSCLES: Muscles,
@@ -49,10 +53,10 @@ class ENTITY:
         }
         
         self.Derivative_Calculations = {
-            _ATTRIBUTE.MAX_HEALTH: lambda: 200 + (25 * self.Total_Attribute(_ATTRIBUTE.BONES)),
+            _ATTRIBUTE.MAX_HEALTH: lambda: 100 + ((12 * self.Total_Attribute(_ATTRIBUTE.BONES) * self.Level)),
             _ATTRIBUTE.DODGE: lambda: int(1.5 * self.Total_Attribute(_ATTRIBUTE.HASTE)),
-            _ATTRIBUTE.MANA_REGEN: lambda: (self.Total_Attribute(_ATTRIBUTE.BRAIN) * 6),
-            _ATTRIBUTE.MAX_MANA: lambda: 200 + (25 * self.Total_Attribute(_ATTRIBUTE.MEMORY)),
+            _ATTRIBUTE.MANA_REGEN: lambda: 4 * (self.Total_Attribute(_ATTRIBUTE.BRAIN)),
+            _ATTRIBUTE.MAX_MANA: lambda: 50 + ((6 * self.Total_Attribute(_ATTRIBUTE.MEMORY) * self.Level)),
         }
 
         
@@ -74,6 +78,7 @@ class ENTITY:
         self.Thorns_Type: _DAMAGE_TYPE = _DAMAGE_TYPE.SLASHING
         
         self.Shield = 0
+        self.Alive = True
         
         #ALL ATTRIBUTES
         self.All_Attributes_Addend: int = 0
@@ -95,15 +100,18 @@ class ENTITY:
         self.Status_effect = []
         self.Stunned: bool = False
         
-        self.Basic_Attack_Quantity = 1
+        self.Level = 1
         
         #INITIAL ACTUALS
         self.Actual_Health = self.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)
         self.Actual_Mana = 0
         
     def Take_Damage(self, DAMAGE: DAMAGE) -> int:
-        Final_Damage = self.Damage_Check(DAMAGE)  
-        self.Actual_Health -= Final_Damage
+        Final_Damage = self.Damage_Check(DAMAGE)
+        if DAMAGE.Fatal:
+            self.Actual_Health -= Final_Damage
+        else:
+            self.Actual_Health = max(1, self.Actual_Health - Final_Damage)
         
         if self.Actual_Health <= 0:
             self.Death()
@@ -133,7 +141,7 @@ class ENTITY:
         return max(1, int(Total_Damage))
     
     def Death(self):
-        pass
+        self.Alive = False
     
     def __repr__(self):
         pf = lambda x: int((49 - len(x))/2)

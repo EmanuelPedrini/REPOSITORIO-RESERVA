@@ -24,7 +24,8 @@ class _SKILL:
 
         if not Enemy_Targets:
             return f"{Caster.Name} tried to use {self.Name}, but NO Enemy_Targets!"
-
+        
+        Caster.Actual_Mana -= self.Mana_Cost
         Report = [f"{Caster.Name} used {self.Name}!"]
 
         for target in Enemy_Targets:

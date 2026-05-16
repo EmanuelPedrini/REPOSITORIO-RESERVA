@@ -6,6 +6,7 @@ class DAMAGE:
     Amount: int
     Type: _DAMAGE_TYPE
     Source: object
+    Fatal: bool = True
 
 @dataclass
 class REQUEST:
