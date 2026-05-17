@@ -15,16 +15,23 @@ def Generate_Random_Kimera_Name():
                    "Soggy","Mama","Skinny", "Baloon","Cheeks","Pancake",
                    "Belly", "Goofy","Bubble", "Pancake", "Nail", 
                    "HotDog", "Noodles", "Funny","Miss", "Stupid",
-                   "Sweetis"]
+                   "Sweetis", "Puffy", "Spaghetti","Sniffy", "Stinky", "Winky",
+                   "Dizzy","Tiny", "Peebles", "Feet Fungus", "Tummy", "Fluffy", 
+                   "Kimera"]
     
     Last_Names = [" Genocide", " Intestines", " Power Drill", " Bafemoth", 
                   " ThunderBones", " Head Beater", " Goat"," Uglyas'fuk",
                   " Fish Eater", " Dog Eater", " Woodpecker"," Crocodile", "Gpt",
-                  " MixTape"," Hades", " Rimworld"," Isaac"," Hero"," ZERO",("-"+ str(random.randint(1, 1000))),
-                  "?!"]
+                  " MixTape"," Hades", " Rimworld"," Isaac"," Hero"," ZERO", ("-"+ str(random.randint(1, 1000))),
+                  "?!", " Meat Grinder", " Hamster Eater", "Bad Kidney", "Soup Criminal",
+                  " Nuclear Baby"," Nuclear Waster"," Uranium"," Tax Evasion"," Floor Licker",
+                  " Door Kicker"," Knee Biter"," Teeth Eater",", The Big"," Mama Killer",
+                  "Papa Killer", ".exe"]
     
     Rare_Names = ["Osama Billaden", "Mc Sapato", "Donald NotDuck", "Karen", 
-                  "Milton", "Tangananica", "Tangananá", "Bogart", "Samural"]
+                  "Milton", "Tangananica", "Tangananá", "Bogart", "Samural",
+                  "Napoleon Bonapita","Jhon Bimba","Elon Mustache","Saddam Hussem","Spongebob Squeezy-Pants",
+                  "Shrek","Baby Eater"]
     
     Rare_Name_Chance = random.randint(1, 100)
     

@@ -1,172 +1,39 @@
 from PUBLIC.Public_Standards import *
-from PUBLIC.Public_Enums import _DAMAGE_TYPE
+from PUBLIC.Public_Enums import _DAMAGE_TYPE, _SIDE, _ATTRIBUTE, _ATTACK_DISTANCE
+from PUBLIC.Public_Classes import DAMAGE
+from SYSTEMS.Command_System import Loop_Input, Target_Choice
+# from SYSTEMS.Combat_System import COMBAT_SYSTEM
+
 
 #implementando um sistema de ataque básico diferente baseados nos antigos, usando ataque basic antigo e skill, agora vai ficar mais parecido com uma skill
-class _SKILL:
+class Effect:
+    def Apply(self, Attacker, Target, Combat):
+        return ""
+
+class _BASIC_ATTACK:
     def __init__(self,
-                 ID: int,
+                 ID: str,
                  Name: str, 
                  Effects, 
+                 
                  Target_Type,
-                 Damage_Type,
-                 Calculation):
+                 Attack_Distance,
+                 
+                 Quantity,
+                 Can_Critical_Hit,
+                 Can_Apply_Vampirism):
         
         self.ID  = ID
         self.Name = Name
         self.Effects = Effects
-        self.Damage_Type = Damage_Type
-        self.Calculation = Calculation
         self.Target_Type = Target_Type
         
-        def Attack(self, Caster, Combat):
-            Enemy_Targets = self.Target_Type(Caster, Combat)
-            if not Enemy_Targets:
-                return f"{Caster.Name} tried to ATTACK, but NO Enemy_Targets!"
-            Report [f"{Caster.Name} used his BASIC ATTACK!"]
-
-
-
-
-
-
-            for target in Enemy_Targets:
-                # Report.append(f"-> {target.Name}")
-                for effect in self.Effects:
-                    result = effect.Apply(Caster, target, Combat)
-                    if result:
-                        Report.append(result)
-
-            return "\n".join(Report)
-        return f"{Caster.Name} doesn't have sufficient mana to cast {self.Name}"
-    
-    def __repr__(self):
-        if self is None: return "INEXISTENT"
-        else:
-            return (
-                f"HELLO I'AM A SKILL"
-            )
-
-class Effect:
-    def Apply(self, Caster, Target, Combat):
-        return ""
-
-class DamageEffect(Effect):
-    def __init__(self, Multiplier, Attribute, Type: _DAMAGE_TYPE):
+        self.Attack_Distance = Attack_Distance
         
-        self.Multiplier = Multiplier
-        self.Attribute = Attribute
-        self.Type = Type
-    
-
-    def Apply(self, Caster, Target, Combat):
+        self.Quantity = Quantity
+        self.Can_Critical_Hit = Can_Critical_Hit
+        self.Can_Apply_Vampirism = Can_Apply_Vampirism
         
-        Base_Amount = self.Attribute(Caster)
-        damage = int(Base_Amount * self.Multiplier)
-
-        Target.Take_Damage(DAMAGE(damage, self.Type, Caster))
-
-        return f"-> {Target.Name} took {damage} damage"
-
-class FixedDamageEffect(Effect):
-    def __init__(self, Amount, Type: _DAMAGE_TYPE):
-        self.Amount = Amount
-        self.Type = Type
-
-    def Apply(self, Caster, Target, Combat):
-        Target.Take_Damage(DAMAGE(self.Amount, self.Type, Caster))
-
-        return f"-> {Target.Name} took {self.Amount} damage"
-
-
-class HealEffect(Effect):
-    def __init__(self, Attribute, Multiplier):
-        
-        self.Multiplier = Multiplier
-        self.Attribute = Attribute
-
-    def Apply(self, Caster, Target, Combat):
-        Base_Amount = self.Attribute(Caster)
-        Healed_Amount = int(Base_Amount * self.Multiplier)
-
-        Target.Heal(Healed_Amount)
-
-        return f"-> {Target.Name} healed {Healed_Amount} HP"
-
-class FixedHealEffect(Effect):
-    def __init__(self, Amount):
-        self.Amount = Amount
-        
-    def Apply(self, Caster, Target, Combat):
-        Target.Heal(self.Amount)
-
-        return f"-> {Target.Name} healed {self.Amount} HP"
-
-
-class ShieldEffect(Effect):
-    def __init__(self, Amount):
-        self.Amount = Amount
-
-    def Apply(self, Caster, Target, Combat):
-        Target.Shield += self.Amount
-        return f"-> {Target.Name} gained {self.Amount} shield"
-
-class HealEffect(Effect):
-    def __init__(self, Multiplier, Attribute):
-        
-        self.Multiplier = Multiplier
-        self.Attribute = Attribute
-
-    def Apply(self, Caster, Target, Combat):
-        Base_Amount = self.Attribute(Caster)
-        Healed_Amount = int(Base_Amount * self.Multiplier)
-
-        Target.Heal(Healed_Amount)
-
-        return f"-> {Target.Name} healed {Healed_Amount} HP"
-
-class Targeting:
-    @staticmethod
-    def Enemy(Caster, Combat):
-        Enemy_Targets = Combat.Get_Enemy_Team(Caster)
-        if Caster.Side == _SIDE.PLAYER:
-            Choosed_Target = Target_Choice(Enemy_Targets)
-        elif Caster.Side == _SIDE.ENEMY:
-            if not Enemy_Targets:
-                return []
-            else:
-                return[random.choice(Enemy_Targets)]
-        if not Enemy_Targets:
-            return []
-        return [Choosed_Target]
-
-    @staticmethod
-    def Self(Caster, Combat):
-        return [Caster]
-
-    @staticmethod
-    def All_Enemies(Caster, Combat):
-        return Combat.Get_Enemy_Team(Caster)
-    
-    @staticmethod
-    def All_Ally(Caster, Combat):
-        return Combat.Get_Ally_Team(Caster) 
-
-Fireball = _SKILL(
-    "fireball_skill",
-    "Fireball",
-    50,
-    [FixedDamageEffect(120, _DAMAGE_TYPE.FIRE)],
-    Targeting.All_Enemies
-)
-Vampiric_Bite = _SKILL(
-    "vampiric_bite_skill",
-    "Vampiric Bite",
-    15,
-    [FixedDamageEffect(20, _DAMAGE_TYPE.MALIGNANT)],
-    Targeting.Enemy
-)
-
-class COMBAT_DATA:
     @staticmethod
     def Attack_Roll(Target):
         Entity_Dodge = Target.Total_Attribute(_ATTRIBUTE.DODGE)
@@ -182,26 +49,12 @@ class COMBAT_DATA:
         Entity_Counter = Target.Total_Attribute(_ATTRIBUTE.COUNTERATTACK)
         return random.randint(1, 100) <= Entity_Counter
     
+    
+    ############################################################
+    
     @staticmethod
-    def Calculate_Damage(Attacker):
-        #CALCS
-        Attacker_Distance = Attacker.Current_Attack_Distance
-        
-        if Attacker_Distance == _ATTACK_DISTANCE.MELEE:
-            Special_Attribute = _ATTRIBUTE.MELEE_DAMAGE
-            Main_Attribute = (_ATTRIBUTE.MUSCLES)
-           
-        else:
-            Special_Attribute = (_ATTRIBUTE.RANGED_DAMAGE)
-            Main_Attribute = (_ATTRIBUTE.HASTE)
-            
-        Attack_Special_Value = (Attacker.Total_Attribute(Special_Attribute) * 0.75)
-        Attack_Core_Value = (Attacker.Total_Attribute(Main_Attribute)) * 10
-            
-        Total_Attack = (Attack_Special_Value + Attack_Core_Value)
-            
-        if Attacker_Distance == _ATTACK_DISTANCE.RANGED:
-            Total_Attack = 2 + ((Total_Attack) * 0.75)
+    def Calculate(self, Attacker):
+        Attacker_Distance = self.Attack_Distance
         
         Total_Attack *= (1 + Attacker.Total_Attribute(_ATTRIBUTE.DAMAGE)/100)
             
@@ -209,13 +62,38 @@ class COMBAT_DATA:
         Random_Damage = random.randint(0, int((Total_Attack) * 0.20))
         return Static_Damage + Random_Damage
     
-    @staticmethod
-    def Basic_Attack(Attacker, Target, Can_Counter: bool = True):
-        if COMBAT_DATA.Attack_Roll(Target):
-            Total_Damage_Amount = COMBAT_DATA.Calculate_Damage(Attacker)
+    
+    #############################################################
+    
+    def Attack(self, Attacker, 
+                     Combat,
+                     Can_Crit, 
+                     Can_Counter: bool = True):
+        
+        Enemy_Targets = self.Target_Type(Attacker, Combat)
+        
+        if not Enemy_Targets:
+            return f"{Attacker.Name} tried to ATTACK, but NO Enemy_Targets!"
             
-            if COMBAT_DATA.Critical_Roll(Attacker):
-                Total_Damage_Amount = int(Total_Damage_Amount * Attacker.Total_Attribute(_ATTRIBUTE.CRITICAL_MULTIPLIER))
+        Report = [f"{Attacker.Name} used his BASIC ATTACK!"]
+            
+        for Target in Enemy_Targets:
+            
+            Report.append(f"-> {Target.Name}")
+            
+            for Effect in self.Effects:
+                Result = Effect.Apply(Attacker, Target, Combat)
+                if Result:
+                    Report.append(Result)
+    
+    ##################################################################
+    
+        if self.Attack_Roll(Target):
+            Total_Damage_Amount = self.Calculate(Attacker)
+            
+            if Can_Crit:
+                if self.Critical_Roll(Attacker):
+                    Total_Damage_Amount = int(Total_Damage_Amount * Attacker.Total_Attribute(_ATTRIBUTE.CRITICAL_MULTIPLIER))
                 
             Damage_taken = DAMAGE(Total_Damage_Amount, 
                                 Attacker.Current_Attack_Type, 
@@ -236,16 +114,131 @@ class COMBAT_DATA:
             
             if Can_Counter:
                 if not Fatal_Attack:
-                    if COMBAT_DATA.Counter_Attack_Roll(Target):
-                        COMBAT_DATA.Basic_Attack(
+                    if self.Counter_Attack_Roll(Target):
+                        self.Basic_Attack(
                             Target,
                             Attacker,
                             Can_Counter = False
                         )
-                
-            #TESTES TEMPORÁRIOS!!!
+                        
+        
+        
+        ######################################################
+        
             print(f"{Attacker.Name} attacked {Target.Name}, causing {Damage_Taken_After_Resistances} damage! \n{Target.Name} HP: {Target.Actual_Health} / {Target.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)}")
             return True
         else:
             print(f"{Attacker.Name} missed a attack against {Target.Name}")
             return False
+        
+        ####################################
+
+    def __repr__(self):
+        if self is None: return "INEXISTENT"
+        else:
+            return (
+                f"HELLO I'AM A ATTACK"
+            )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class DamageEffect(Effect):
+    def __init__(self, Multiplier, Attribute, Type: _DAMAGE_TYPE):
+        self.Multiplier = Multiplier
+        self.Attribute = Attribute
+        self.Type = Type
+    
+
+    def Apply(self, Attacker, Target, Combat):
+        
+        Base_Amount = self.Attribute(Attacker)
+        damage = int(Base_Amount * self.Multiplier)
+
+        Target.Take_Damage(DAMAGE(damage, self.Type, Attacker))
+
+        return f"-> {Target.Name} took {damage} damage"
+
+class FixedDamageEffect(Effect):
+    def __init__(self, Amount, Type: _DAMAGE_TYPE):
+        self.Amount = Amount
+        self.Type = Type
+
+    def Apply(self, Attacker, Target, Combat):
+        Target.Take_Damage(DAMAGE(self.Amount, self.Type, Attacker))
+
+        return f"-> {Target.Name} took {self.Amount} damage"
+
+
+class HealEffect(Effect):
+    def __init__(self, Attribute, Multiplier):
+        
+        self.Multiplier = Multiplier
+        self.Attribute = Attribute
+
+    def Apply(self, Attacker, Target, Combat):
+        Base_Amount = self.Attribute(Attacker)
+        Healed_Amount = int(Base_Amount * self.Multiplier)
+
+        Target.Heal(Healed_Amount)
+
+        return f"-> {Target.Name} healed {Healed_Amount} HP"
+
+class FixedHealEffect(Effect):
+    def __init__(self, Amount):
+        self.Amount = Amount
+        
+    def Apply(self, Attacker, Target, Combat):
+        Target.Heal(self.Amount)
+
+        return f"-> {Target.Name} healed {self.Amount} HP"
+
+class Targeting:
+    @staticmethod
+    def Enemy(Attacker, Combat):
+        Enemy_Targets = Combat.Get_Enemy_Team(Attacker)
+        if Attacker.Side == _SIDE.PLAYER:
+            Choosed_Target = Target_Choice(Enemy_Targets)
+        elif Attacker.Side == _SIDE.ENEMY:
+            if not Enemy_Targets:
+                return []
+            else:
+                return[random.choice(Enemy_Targets)]
+        if not Enemy_Targets:
+            return []
+        return [Choosed_Target]
+
+    @staticmethod
+    def Self(Attacker, Combat):
+        return [Attacker]
+
+    @staticmethod
+    def All_Enemies(Attacker, Combat):
+        return Combat.Get_Enemy_Team(Attacker)
+    
+    @staticmethod
+    def All_Ally(Attacker, Combat):
+        return Combat.Get_Ally_Team(Attacker) 
+
+
+###################################################
+Melee_Natural_Attack_Kimera = _BASIC_ATTACK(
+    "melee_natural_attack_kimera",
+    "BASIC ATTACK ( MELEE )",
+    [FixedDamageEffect(120, _DAMAGE_TYPE.FIRE)],
+    Targeting.All_Enemies,
+    1,
+    _ATTACK_DISTANCE.MELEE,
+    True
+)
+
