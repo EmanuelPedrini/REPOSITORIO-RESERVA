@@ -20,7 +20,10 @@ Joao_Mata_Galinha = KIMERA("João Mata-Galinha",
 
 Mariazinha_Mata_Frango = KIMERA("Mariazinha Mata-Frango", 
                             _GENDER.FEMALE,
-                            2, 2, 2, 2, 2, 2,
+                            2, 200, 2, 2, 2, 2,
                             [Fireball, Vampiric_Bite], [], [], 
                             _ATTACK_DISTANCE.RANGED,
                             _DAMAGE_TYPE.BLUDGEONING)
+
+New_Kimera = KIMERA.Breeding_Between(Mariazinha_Mata_Frango, Joao_Mata_Galinha, 0, 0, 0)
+print(New_Kimera)

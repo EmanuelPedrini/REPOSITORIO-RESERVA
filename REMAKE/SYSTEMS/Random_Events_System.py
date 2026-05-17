@@ -5,15 +5,15 @@ from PUBLIC.Public_Classes import DAMAGE
 from CLASSES.EVENT import EVENT
 
 def Event_Generator():
-    Random_Event_Generator = random.randint(1, 100)
+    Random_Event_Generator = random.randint(1, 1000)
     
-    if Random_Event_Generator <= 25:
+    if Random_Event_Generator <= 242:
         return (_SITE.BAD_EVENT, random.choice(Bad_Events))
 
-    elif Random_Event_Generator <= 60:
+    elif Random_Event_Generator <= 547:
         return (_SITE.COMBAT, )
     
-    elif Random_Event_Generator <= 85:
+    elif Random_Event_Generator <= 869:
         return (_SITE.NEUTRAL_EVENT, random.choice(Neutral_Events))
     
     else:

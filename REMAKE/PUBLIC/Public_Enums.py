@@ -15,7 +15,8 @@ class _EQUIPMENT_SLOTS(Enum):
     HEAD = 0
     BODY = 1
     HAND = 2
-    ACCESSORY = 3
+    BOOTS = 3
+    ACCESSORY = 4
 
 class _GENDER(Enum):
     MALE = 0

@@ -1,6 +1,7 @@
 from CLASSES.SKILLS import _SKILL
 from CLASSES.PASSIVES import _PASSIVE
 from CLASSES.MUTATIONS import _MUTATIONS
+from CLASSES.ITEM import _ITEM
 from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _TYPE_RESISTANCES, _MODIFIER_TYPE, _GENDER, _SIDE, _EQUIPMENT_SLOTS, DAMAGE_RESISTANCE_MAP, _DAMAGE_TYPE
 from PUBLIC.Public_Classes import DAMAGE
 from PUBLIC.Public_Standards import Conversions, Clamp
@@ -72,7 +73,7 @@ class ENTITY:
         self.Passives: list[_PASSIVE] = Passives
         
         #MUTATION SYSTEM
-        self.Mutation: list[_MUTATIONS] = Mutations
+        self.Mutations: list[_MUTATIONS] = Mutations
         
         #THORNS SYSTEM
         self.Thorns_Type: _DAMAGE_TYPE = _DAMAGE_TYPE.SLASHING
@@ -93,9 +94,13 @@ class ENTITY:
         self.Native_Attack_Type: _ATTACK_DISTANCE = Attack_Type
         self.Current_Attack_Type: _ATTACK_DISTANCE = self.Native_Attack_Type
         
-        # self.Equipment = {
-        #     for slot in _EQUIPMENT_SLOTS
-        # }
+        self.EQUIPMENTS = {
+            _EQUIPMENT_SLOTS.HEAD: None,
+            _EQUIPMENT_SLOTS.BODY: None,
+            _EQUIPMENT_SLOTS.BOOTS: None,
+            _EQUIPMENT_SLOTS.ACCESSORY: None,
+            _EQUIPMENT_SLOTS.HAND: None,
+        }
         
         self.Status_effect = []
         self.Stunned: bool = False
@@ -144,31 +149,39 @@ class ENTITY:
         self.Alive = False
     
     def __repr__(self):
-        pf = lambda x: int((49 - len(x))/2)
-        Bac = f"{self.Actual_Health} / {self.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)}"
+        Bar_Half_Size = lambda x: int((49 - len(x))/2)
+        Health_Bar = f"{self.Actual_Health} / {self.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)} ( {(self.Actual_Health / self.Total_Attribute(_ATTRIBUTE.MAX_HEALTH))*100} % )"
         if self is None: return "INEXISTENT"
         else:
             return (
             f"\n"
-            f"{ "=" * (pf(self.Name) if (len(self.Name)%2==0) else (pf(self.Name)-1)) } {self.Name} {"="*(pf(self.Name))}\n"
-            f"             {self.Gender.name:<11}|       {self.Current_Attack_Distance.name}\n"
-            f"{"="*pf("STATUS")} STATUS {"="*pf("STATUS")}\n"
-            f"   HP: {Bac:<17}|       MANA: {self.Actual_Mana} / {self.Total_Attribute(_ATTRIBUTE.MAX_MANA)}\n"
-            f"{"="*pf("ATTRIBUTES")} ATTRIBUTES {"="*pf("ATTRIBUTES")}\n"
+            f"{ "=" * (Bar_Half_Size(self.Name) if (len(self.Name)%2==0) else (Bar_Half_Size(self.Name)-1)) } {self.Name} {"="*(Bar_Half_Size(self.Name))}\n"
+            f"   {self.Gender.name:<21}|       {self.Current_Attack_Distance.name}\n"
+            f"{"="*Bar_Half_Size("STATUS")} STATUS {"="*Bar_Half_Size("STATUS")}\n"
+            f"   HP: {Health_Bar:<17}\n   MANA: {self.Actual_Mana} / {self.Total_Attribute(_ATTRIBUTE.MAX_MANA)} ( {(self.Actual_Mana / self.Total_Attribute(_ATTRIBUTE.MAX_MANA)) * 100} % )\n"
+            f"{"="*Bar_Half_Size("ATTRIBUTES")} ATTRIBUTES {"="*Bar_Half_Size("ATTRIBUTES")}\n"
             f"   MUSCLES: {self.Total_Attribute(_ATTRIBUTE.MUSCLES):<11} |"
             f"       MEMORY:  {self.Total_Attribute(_ATTRIBUTE.MEMORY):<4}\n"
             f"   HASTE:   {self.Total_Attribute(_ATTRIBUTE.HASTE):<11} |"
             f"       BRAIN:   {self.Total_Attribute(_ATTRIBUTE.BRAIN):<4}\n"
             f"   BONES:   {self.Total_Attribute(_ATTRIBUTE.BONES):<11} |"
             f"       FAITH:   {self.Total_Attribute(_ATTRIBUTE.FAITH):<4}\n"
-            f"{"="*pf("STATS")} STATS {"="*(pf("STATS")-1)}\n"
+            f"{"="*Bar_Half_Size("STATS")} STATS {"="*(Bar_Half_Size("STATS")-1)}\n"
             f"   MELEE:  + {self.Total_Attribute(_ATTRIBUTE.MELEE_DAMAGE):<11}|       RANGED:  + {self.Total_Attribute(_ATTRIBUTE.RANGED_DAMAGE)}\n"
             f"   DAMAGE: + {str(self.Total_Attribute(_ATTRIBUTE.DAMAGE)) + " %":<11}|       DODGE:    {self.Total_Attribute(_ATTRIBUTE.DODGE)} %\n"
             f"   CRIT:     {str(self.Total_Attribute(_ATTRIBUTE.CRITICAL_CHANCE)) + " %":<11}|       MULTI:   x {float(self.Total_Attribute(_ATTRIBUTE.CRITICAL_MULTIPLIER))}\n"
             f"   VAMPIR:   {str(self.Total_Attribute(_ATTRIBUTE.VAMPIRISM)) + " %":<11}|       THORNS:    {self.Total_Attribute(_ATTRIBUTE.THORNS)}\n"
             f"   MANA/p.T  {self.Total_Attribute(_ATTRIBUTE.MANA_REGEN):<11}|       SHIELD     {self.Total_Attribute(_ATTRIBUTE.NATURAL_SHIELD)} \n"
             f"   COUNTER:  {str(self.Total_Attribute(_ATTRIBUTE.COUNTERATTACK)) + " %":<11}|\n"
-            f"{"="*pf("RESISTANCES")} RESISTANCES {"="*(pf("RESISTANCES")-1)}\n"
+            
+            # f"{"="*Bar_Half_Size("SKILLS AND PASSIVES")} SKILLS AND PASSIVES {"="*(Bar_Half_Size("SKILLS AND PASSIVES")-1)}\n"
+            # f"   SLASH:    {self.Total_Attribute(_TYPE_RESISTANCES.SLASHING_RESISTANCE):<11}|       BLUNT:     {self.Total_Attribute(_TYPE_RESISTANCES.BLUDGEONING_RESISTANCE)}\n"
+            # f"   FIRE:     {self.Total_Attribute(_TYPE_RESISTANCES.FIRE_RESISTANCE):<11}|       FROST:     {self.Total_Attribute(_TYPE_RESISTANCES.FROST_RESISTANCE)}\n"
+            # f"   POISON:   {self.Total_Attribute(_TYPE_RESISTANCES.POISONOUS_RESISTANCE):<11}|       ELECTRIC:  {self.Total_Attribute(_TYPE_RESISTANCES.ELECTRIC_RESISTANCE)}\n"
+            # f"   MALIGN:   {self.Total_Attribute(_TYPE_RESISTANCES.MALIGNANT_RESISTANCE):<11}|       RADIANT:   {self.Total_Attribute(_TYPE_RESISTANCES.RADIANT_RESISTANCE)}\n"
+            # f"   PSYCHIC:  {self.Total_Attribute(_TYPE_RESISTANCES.PSYCHIC_RESISTANCE):<11}|       TRUE:      {self.Total_Attribute(_TYPE_RESISTANCES.TRUE_RESISTANCE)}\n"
+            
+            f"{"="*Bar_Half_Size("RESISTANCES")} RESISTANCES {"="*(Bar_Half_Size("RESISTANCES")-1)}\n"
             f"   SLASH:    {self.Total_Attribute(_TYPE_RESISTANCES.SLASHING_RESISTANCE):<11}|       BLUNT:     {self.Total_Attribute(_TYPE_RESISTANCES.BLUDGEONING_RESISTANCE)}\n"
             f"   FIRE:     {self.Total_Attribute(_TYPE_RESISTANCES.FIRE_RESISTANCE):<11}|       FROST:     {self.Total_Attribute(_TYPE_RESISTANCES.FROST_RESISTANCE)}\n"
             f"   POISON:   {self.Total_Attribute(_TYPE_RESISTANCES.POISONOUS_RESISTANCE):<11}|       ELECTRIC:  {self.Total_Attribute(_TYPE_RESISTANCES.ELECTRIC_RESISTANCE)}\n"
@@ -177,7 +190,19 @@ class ENTITY:
             f"{"="*50}\n"
             )
             
+    def Equip_Item(self, 
+                   Item: _ITEM):
+        pass
+    
+    def Unequip_Item(self, 
+                     Item: _ITEM):
+        pass
+    
+    def Remove_Item(self, 
+                    Item: _ITEM):
+        self.EQUIPMENTS[Item.Slot] = None
         
+    
     def Total_Attribute(self, 
                         Attribute: 
                             _ATTRIBUTE | _TYPE_RESISTANCES):
