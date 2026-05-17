@@ -2,6 +2,7 @@ from CLASSES.SKILLS import _SKILL
 from CLASSES.PASSIVES import _PASSIVE
 from CLASSES.MUTATIONS import _MUTATIONS
 from CLASSES.ITEM import _ITEM
+from CLASSES.BASIC_ATTACK import _BASIC_ATTACK
 from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _TYPE_RESISTANCES, _MODIFIER_TYPE, _GENDER, _SIDE, _EQUIPMENT_SLOTS, DAMAGE_RESISTANCE_MAP, _DAMAGE_TYPE
 from PUBLIC.Public_Classes import DAMAGE
 from PUBLIC.Public_Standards import Conversions, Clamp
@@ -34,8 +35,7 @@ class ENTITY:
                  Skills: list[_SKILL],
                  Passives: list[_PASSIVE],
                  Mutations: list[_MUTATIONS],
-                 Attack_Distance: _ATTACK_DISTANCE,
-                 Attack_Type: _DAMAGE_TYPE,
+                 Basic_Attack: _BASIC_ATTACK,
                  Side: _SIDE = _SIDE.ENEMY
                  ):
         
@@ -84,15 +84,10 @@ class ENTITY:
         #ALL ATTRIBUTES
         self.All_Attributes_Addend: int = 0
         self.All_Attributes_Multiplier: float = 1
-
-        #ATTACK SYSTEM
-        self.Original_Attack_Distance: _ATTACK_DISTANCE = Attack_Distance
-        self.Native_Attack_Distance: _ATTACK_DISTANCE = Attack_Distance
-        self.Current_Attack_Distance: _ATTACK_DISTANCE = self.Native_Attack_Distance
         
-        self.Original_Attack_Type: _ATTACK_DISTANCE = Attack_Type
-        self.Native_Attack_Type: _ATTACK_DISTANCE = Attack_Type
-        self.Current_Attack_Type: _ATTACK_DISTANCE = self.Native_Attack_Type
+        #MUDANDO O SISTEMA DE ATAQUE BÁSICO
+        self.Original_Attack: _BASIC_ATTACK = Basic_Attack
+        self.Current_Attack: _BASIC_ATTACK = Basic_Attack 
         
         self.EQUIPMENTS = {
             _EQUIPMENT_SLOTS.HEAD: None,
