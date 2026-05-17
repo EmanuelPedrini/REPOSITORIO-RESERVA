@@ -1,24 +1,32 @@
 from CLASSES.ENTITY import ENTITY
-from PUBLIC.Public_Enums import _SIDE, _GENDER, _ATTRIBUTE, _DAMAGE_TYPE
+from PUBLIC.Public_Enums import _SIDE, _GENDER, _ATTRIBUTE, _DAMAGE_TYPE, _HIERARCHY
 from PUBLIC.Public_Standards import *
 from PUBLIC.Public_Random_Generators import Generate_Random_Kimera_Name
+    
 class KIMERA(ENTITY):
-    def __init__(self, Name, 
-                Gender, 
-                Muscles, Bones, Haste, 
-                Brain, Memory, Faith, 
-                Skills, Passives, Mutations, 
-                Attack_Distance, 
-                Attack_Type, 
-                Side = _SIDE.PLAYER):
+    def __init__(self, 
+                 Name, 
+                 Gender, 
+                 Muscles, Bones, Haste, Brain, Memory, Faith, 
+                 Skills, 
+                 Passives, 
+                 Mutations, 
+                 Basic_Attack,
+                 Hierarchy_Level,
+                 Side = _SIDE.PLAYER):
+        
         super().__init__(Name, 
-                        Gender, 
-                        Muscles, Bones, Haste, 
-                        Brain, Memory, Faith, 
-                        Skills, Passives, Mutations,
-                        Attack_Distance,
-                        Attack_Type,
-                        Side)
+                         Gender, 
+                         Muscles, Bones, Haste, Brain, Memory, Faith, 
+                         Skills, 
+                         Passives, 
+                         Mutations, 
+                         Basic_Attack,
+                         Side)
+        
+        self.Hierarchy_Level = Hierarchy_Level
+        self.Out = False
+        
     @classmethod
     def Breeding_Between(cls, First_Parent: KIMERA, 
                          Second_Parent: KIMERA, 
@@ -66,6 +74,12 @@ class KIMERA(ENTITY):
                     return [random.choice(Parents_Abilities)]
                 return []
             return []
+        
+        def Child_Hierarchy(First_Parent, Second_Parent):
+            if First_Parent.Hierarchy_Level == _HIERARCHY.QUEEN or Second_Parent.Hierarchy_Level == _HIERARCHY.QUEEN:
+                return _HIERARCHY.PRINCESS
+            return _HIERARCHY.COMMONER
+                
             
         return cls(Generate_Random_Kimera_Name(), 
                 random.choice([_GENDER.MALE, _GENDER.FEMALE]) if random.randint(1, 100) <= 85 else _GENDER.HERMAPHRODITE,
@@ -95,8 +109,30 @@ class KIMERA(ENTITY):
                 Inherit_Abilities(First_Parent.Skills, Second_Parent.Skills, Breeding_Quality),
                 Inherit_Abilities(First_Parent.Passives, Second_Parent.Passives, Breeding_Quality),
                 Inherit_Mutations(First_Parent, Second_Parent),
-                random.choice([First_Parent.Original_Attack_Distance, Second_Parent.Original_Attack_Distance]),
-                _DAMAGE_TYPE.BLUDGEONING,
-                Side=_SIDE.PLAYER
+                random.choice([First_Parent.Original_Attack, Second_Parent.Original_Attack]),
+                Child_Hierarchy(First_Parent, Second_Parent)
+                
+        )
+    @classmethod
+    def Generate_Random(cls, Hierarchy_Level):
+        def Random_Attribute():
+            Random_Generator = random.randint(1, 1000)
+            if Random_Generator <= 193:
+                return 4
+            elif Random_Generator <= 879:
+                return 5
+            else:
+                return 6
+        return cls(
+            Generate_Random_Kimera_Name(),
+            random.choice([_GENDER.MALE, _GENDER.FEMALE]) if random.randint(1, 100) <= 85 else _GENDER.HERMAPHRODITE,
+            Random_Attribute(),
+            Random_Attribute(),
+            Random_Attribute(),
+            Random_Attribute(),
+            Random_Attribute(),
+            Random_Attribute(),
+            
+            
         )
         

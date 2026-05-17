@@ -38,7 +38,7 @@ class _SKILL:
                         Report.append(result)
 
             return "\n".join(Report)
-        return f"{Caster.Name} doesn't have sufficient mana to cast {self.Name}"
+        return f"{Caster.Name} doesn't have sufficient mana to cast {self.Name.upper()}!"
     
     def __repr__(self):
         if self is None: return "INEXISTENT"
@@ -159,6 +159,7 @@ Fireball = _SKILL(
     [FixedDamageEffect(120, _DAMAGE_TYPE.FIRE)],
     Targeting.All_Enemies
 )
+
 Vampiric_Bite = _SKILL(
     "vampiric_bite_skill",
     "Vampiric Bite",

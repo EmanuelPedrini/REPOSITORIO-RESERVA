@@ -45,6 +45,8 @@ class _ATTRIBUTE(Enum):
     FAITH = 18
     COUNTERATTACK = 19
     EXTRA_ATTACKS = 20
+    HEALTH_REGEN = 21
+    
     
 class _MODIFIER_TYPE(Enum):
     ADDITIVE = 0
@@ -101,3 +103,8 @@ class _SITE(Enum):
     BAD_EVENT = 1
     NEUTRAL_EVENT = 2
     GOOD_EVENT = 3
+    
+class _HIERARCHY(Enum):
+    COMMONER = 0
+    PRINCESS = 1
+    QUEEN = 2

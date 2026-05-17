@@ -5,12 +5,10 @@ class EVENT:
     def __init__(self, 
                  Name: str, 
                  Text: str, 
-                 Choices: list,
-                 Event_Target):
+                 Choices: list):
         self.Name = Name
         self.Text = Text
         self.Choices = Choices
-        self.Event_Target = Event_Target
 
     def Trigger(self, player):
         while True:

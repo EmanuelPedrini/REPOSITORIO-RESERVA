@@ -1,93 +1,9 @@
 from CLASSES.ENTITY import ENTITY
 from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _SIDE, _GENDER
 from PUBLIC.Public_Classes import DAMAGE
+from CLASSES.BASIC_ATTACK import _BASIC_ATTACK
 from PUBLIC.Public_Standards import *
 from SYSTEMS.Command_System import Loop_Input, Target_Choice, Validate_Enumbered_Choice
-
-class COMBAT_DATA:
-    @staticmethod
-    def Attack_Roll(Target):
-        Entity_Dodge = Target.Total_Attribute(_ATTRIBUTE.DODGE)
-        return (random.randint(1, 100) > Entity_Dodge)
-
-    @staticmethod
-    def Critical_Roll(Attacker):
-        Entity_Critical_Chance = Attacker.Total_Attribute(_ATTRIBUTE.CRITICAL_CHANCE)
-        return random.randint(1, 100) <= Entity_Critical_Chance
-    
-    @staticmethod
-    def Counter_Attack_Roll(Target):
-        Entity_Counter = Target.Total_Attribute(_ATTRIBUTE.COUNTERATTACK)
-        return random.randint(1, 100) <= Entity_Counter
-    
-    @staticmethod
-    def Calculate_Damage(Attacker):
-        #CALCS
-        Attacker_Distance = Attacker.Current_Attack_Distance
-        
-        if Attacker_Distance == _ATTACK_DISTANCE.MELEE:
-            Special_Attribute = _ATTRIBUTE.MELEE_DAMAGE
-            Main_Attribute = (_ATTRIBUTE.MUSCLES)
-           
-        else:
-            Special_Attribute = (_ATTRIBUTE.RANGED_DAMAGE)
-            Main_Attribute = (_ATTRIBUTE.HASTE)
-            
-        Attack_Special_Value = (Attacker.Total_Attribute(Special_Attribute) * 0.75)
-        Attack_Core_Value = (Attacker.Total_Attribute(Main_Attribute)) * 10
-            
-        Total_Attack = (Attack_Special_Value + Attack_Core_Value)
-            
-        if Attacker_Distance == _ATTACK_DISTANCE.RANGED:
-            Total_Attack = 2 + ((Total_Attack) * 0.75)
-        
-        Total_Attack *= (1 + Attacker.Total_Attribute(_ATTRIBUTE.DAMAGE)/100)
-            
-        Static_Damage = max(0, int(Total_Attack * 0.90))
-        Random_Damage = random.randint(0, int((Total_Attack) * 0.20))
-        return Static_Damage + Random_Damage
-    
-    @staticmethod
-    def Basic_Attack(Attacker, Target, Can_Counter: bool = True):
-        if COMBAT_DATA.Attack_Roll(Target):
-            Total_Damage_Amount = COMBAT_DATA.Calculate_Damage(Attacker)
-            
-            if COMBAT_DATA.Critical_Roll(Attacker):
-                Total_Damage_Amount = int(Total_Damage_Amount * Attacker.Total_Attribute(_ATTRIBUTE.CRITICAL_MULTIPLIER))
-                
-            Damage_taken = DAMAGE(Total_Damage_Amount, 
-                                Attacker.Current_Attack_Type, 
-                                Attacker)
-            
-            Damage_Taken_After_Resistances = Target.Take_Damage(Damage_taken)
-            Fatal_Attack = (Target.Actual_Health) <= 0
-            
-            Vampirism = Attacker.Total_Attribute(_ATTRIBUTE.VAMPIRISM)
-            Target_Thorns = Target.Total_Attribute(_ATTRIBUTE.THORNS)
-            
-            if Vampirism > 0:
-                Attacker.Heal(int(Damage_Taken_After_Resistances * Vampirism/100))
-            
-            if Target_Thorns > 0:
-                if not Fatal_Attack:
-                    Attacker.Take_Damage(DAMAGE(Target_Thorns, Target.Thorns_Type, Target, Fathal=False))
-            
-            if Can_Counter:
-                if not Fatal_Attack:
-                    if COMBAT_DATA.Counter_Attack_Roll(Target):
-                        COMBAT_DATA.Basic_Attack(
-                            Target,
-                            Attacker,
-                            Can_Counter = False
-                        )
-                
-            #TESTES TEMPORÁRIOS!!!
-            print(f"{Attacker.Name} attacked {Target.Name}, causing {Damage_Taken_After_Resistances} damage! \n{Target.Name} HP: {Target.Actual_Health} / {Target.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)}")
-            return True
-        else:
-            print(f"{Attacker.Name} missed a attack against {Target.Name}")
-            return False
-
 
 class COMBAT_SYSTEM:
     def __init__(self, Team_A, Team_B):
@@ -126,11 +42,31 @@ class COMBAT_SYSTEM:
         
     def Print_Label(self):
         pass
-        
-    def Character_turn_end(self, Character):
+    
+    #PARÂMETROS DE TEMPO EM COMBATE
+    def Turn_Start(self):
+        pass
+    
+    def Turn_End(self, Entity: ENTITY):
+        if Entity.Can_Regenerate_Mana:
+            Entity.Actual_Mana += Entity.Total_Attribute(_ATTRIBUTE.MANA_REGEN)
+        if Entity.Can_Regenerate_Health:
+            Entity.Heal(Entity.Total_Attribute(_ATTRIBUTE.HEALTH_REGEN))
+        pass
+    
+    def Combat_End(self):
+        pass
+    
+    def Combat_Start(self):
+        pass
+    
+    def Round_Start(self):
+        pass
+    
+    def Round_End(self):
         pass
         
-    def Show_Character_Options(self, Character: ENTITY):
+    def Show_Character_Options(self, Character):
         
             Executed_Attacks = 0
             Maximum_Attacks = 1 + (Character.Total_Attribute(_ATTRIBUTE.EXTRA_ATTACKS))
@@ -138,6 +74,7 @@ class COMBAT_SYSTEM:
             print(f"It`s {Character.Name}'s Turn!")
             print(f"{Character.Name} HP: {Character.Actual_Health} / {Character.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)}")
             print(f"{Character.Name} MANA: {Character.Actual_Mana} / {Character.Total_Attribute(_ATTRIBUTE.MAX_MANA)}")
+            print("")
             
             while True:
                 self.Clean_Dead()
@@ -166,15 +103,10 @@ class COMBAT_SYSTEM:
                         print("You already used ALL your basic attacks this TURN")
                         
                     else:
-                        Basic_Attack_Target = Target_Choice(self.Get_Enemy_Team(Character))
-                        
-                        if not Basic_Attack_Target:
-                            continue
-                        
-                        if Basic_Attack_Target.Actual_Health > 0:
-                            COMBAT_DATA.Basic_Attack(Character, Basic_Attack_Target)
-                            Executed_Attacks += 1
-                            continue
+                        Attack_Report = Character.Current_Attack.Basic_Attack(Character, self)
+                        print(Attack_Report)
+                        Executed_Attacks += 1
+                        continue
                             
                 elif Intent.isdigit():
                     Index = int(Intent) - 2
@@ -188,22 +120,13 @@ class COMBAT_SYSTEM:
                         print("INVALID")
                         
                 elif Intent.lower() in ("endturn", "et", "end turn", "endt", "end_turn", "end", "stop", "break", "turn"):
-                    print(f"{Character.Name} ended {"his" if Character.Gender == _GENDER.MALE else "her"} turn!")
-                    self.Character_turn_end(Character)
+                    print(f"{Character.Name} ended {'his' if Character.Gender == _GENDER.MALE else 'her'} TURN!\n")
+                    self.Turn_End(Character)
                     break
                 
                 else:
                     print("INVALID")
                     continue
-                
-    # def Enemy_Turn(self, Enemy):
-    #     Possible_Target = self.Get_Enemy_Team(Enemy)
-    #     if not Possible_Target:
-    #         self.Clean_Dead()
-    #         return
-    #     Wanted_Target = random.choice(self.Get_Enemy_Team(Enemy))
-    #     COMBAT_DATA.Basic_Attack(Enemy, Wanted_Target)
-    #     print("Enemy played a turn")
         
     def Enemy_Turn(self, Enemy):
         Executed_Attacks = 0
@@ -217,23 +140,16 @@ class COMBAT_SYSTEM:
             Possible_Skills = [Skill for Skill in Enemy.Skills if Skill.Can_Cast(Enemy)]
             
             if Enemy.Stunned:
-                print(f"{Enemy.Name} is STUNNED!!")
+                print(f"{Enemy.Name} is STUNNED!!\n")
                 time.sleep(1)
                 Enemy.Stunned = False
                 break
             
             elif Executed_Attacks < Maximum_Attacks:
-                Possible_Targets = self.Get_Enemy_Team(Enemy)
-                
-                if not Possible_Targets:
-                    break
-                
-                Basic_Attack_Target = random.choice(Possible_Targets)
-                
-                if Basic_Attack_Target.Actual_Health > 0:
-                    COMBAT_DATA.Basic_Attack(Enemy, Basic_Attack_Target)
-                    Executed_Attacks += 1
-                    continue
+                Attack_Report = Enemy.Current_Attack.Basic_Attack(Enemy, self)
+                print(Attack_Report)
+                Executed_Attacks += 1
+                continue
               
             elif Possible_Skills:
                     Used_Skill = random.choice(Possible_Skills)
@@ -241,8 +157,8 @@ class COMBAT_SYSTEM:
                     print(Casted)
                     continue   
             else: 
-                print(f"{Enemy.Name} ended {"his" if Enemy.Gender == _GENDER.MALE else "her"} turn!")
-                self.Character_turn_end(Enemy)
+                # print(f"{Enemy.Name} ended {'his' if Enemy.Gender == _GENDER.MALE else 'her'} TURN!\n")
+                self.Turn_End(Enemy)
                 break
 
     def Combat_Between(self):
@@ -261,8 +177,8 @@ class COMBAT_SYSTEM:
             
             if Combat.Get_Winner():
                 print(Combat.Get_Winner())
+                self.Combat_End()
                 break
-            
             Actual_Turn = tm.Turn()
             if Actual_Turn.Alive :
                 if Actual_Turn.Side == _SIDE.PLAYER:
@@ -270,6 +186,7 @@ class COMBAT_SYSTEM:
                 elif Actual_Turn.Side == _SIDE.ENEMY:
                     Combat.Enemy_Turn(Actual_Turn)
             tm.Next_Turn()
+            
 class TURN_MASTER:
     def __init__(self, Entities):
         self.Entities = Entities
@@ -280,12 +197,12 @@ class TURN_MASTER:
         return self.Entities[self.turn]
 
     def Next_Turn(self):
-        self.turn+=1
+        self.turn += 1
         if self.turn >= len(self.Entities):
             self.turn = 0
 
     def Clean_Dead(self):
         self.Entities = [e for e in self.Entities if e.Actual_Health > 0]
         if self.turn >= len(self.Entities):
-            self.turn= 0
+            self.turn = 0
             self.Round += 1

@@ -26,7 +26,7 @@ def Generate_Random_Kimera_Name():
                   "?!", " Meat Grinder", " Hamster Eater", "Bad Kidney", "Soup Criminal",
                   " Nuclear Baby"," Nuclear Waster"," Uranium"," Tax Evasion"," Floor Licker",
                   " Door Kicker"," Knee Biter"," Teeth Eater",", The Big"," Mama Killer",
-                  "Papa Killer", ".exe"]
+                  " Papa Killer", ".exe"]
     
     Rare_Names = ["Osama Billaden", "Mc Sapato", "Donald NotDuck", "Karen", 
                   "Milton", "Tangananica", "Tangananá", "Bogart", "Samural",

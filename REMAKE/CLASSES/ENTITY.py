@@ -22,6 +22,17 @@ class ATTRIBUTE_MODIFIER():
         self.Source = Source
         self.Duration = Duration
 
+class INJURIE:
+    def __init__(self, 
+                 Attribute:_ATTRIBUTE | _TYPE_RESISTANCES, 
+                 Operation: _MODIFIER_TYPE, 
+                 Value: float
+                 ):
+        
+        self.Attribute: _ATTRIBUTE | _TYPE_RESISTANCES = Attribute
+        self.Operation: _MODIFIER_TYPE = Operation
+        self.Value: float = Value
+        
 class ENTITY:
     def __init__(self,
                  Name: str,
@@ -98,6 +109,7 @@ class ENTITY:
         }
         
         self.Status_effect = []
+        self.Injuries = []
         self.Stunned: bool = False
         
         self.Level = 1
@@ -105,6 +117,11 @@ class ENTITY:
         #INITIAL ACTUALS
         self.Actual_Health = self.Total_Attribute(_ATTRIBUTE.MAX_HEALTH)
         self.Actual_Mana = 0
+        
+        #PARÂMETROS TALVEZ TEMPORÁRIOS
+        self.Can_Regenerate_Health: bool = True
+        self.Can_Regenerate_Mana: bool =  True
+        
         
     def Take_Damage(self, DAMAGE: DAMAGE) -> int:
         Final_Damage = self.Damage_Check(DAMAGE)
@@ -151,7 +168,7 @@ class ENTITY:
             return (
             f"\n"
             f"{ "=" * (Bar_Half_Size(self.Name) if (len(self.Name)%2==0) else (Bar_Half_Size(self.Name)-1)) } {self.Name} {"="*(Bar_Half_Size(self.Name))}\n"
-            f"   {self.Gender.name:<21}|       {self.Current_Attack_Distance.name}\n"
+            f"   {self.Gender.name:<21}|       {self.Current_Attack}\n"
             f"{"="*Bar_Half_Size("STATUS")} STATUS {"="*Bar_Half_Size("STATUS")}\n"
             f"   HP: {Health_Bar:<17}\n   MANA: {self.Actual_Mana} / {self.Total_Attribute(_ATTRIBUTE.MAX_MANA)} ( {(self.Actual_Mana / self.Total_Attribute(_ATTRIBUTE.MAX_MANA)) * 100} % )\n"
             f"{"="*Bar_Half_Size("ATTRIBUTES")} ATTRIBUTES {"="*Bar_Half_Size("ATTRIBUTES")}\n"
