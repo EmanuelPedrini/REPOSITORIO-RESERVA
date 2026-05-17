@@ -242,4 +242,5 @@ class ENTITY:
         elif isinstance(Attribute, _TYPE_RESISTANCES):
             return (0 + Total_Additives) * Total_Multiplicatives
 
+#TESTE
                     
