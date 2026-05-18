@@ -132,6 +132,7 @@ class ENTITY:
         
         if self.Actual_Health <= 0:
             self.Death()
+            
         return Final_Damage
     
     def Heal(self, Amount) -> int:
@@ -213,7 +214,19 @@ class ENTITY:
     def Remove_Item(self, 
                     Item: _ITEM):
         self.EQUIPMENTS[Item.Slot] = None
+    
+    def Regenerate_Mana(self, Amount):
         
+        self.Actual_Mana += self.Total_Attribute(_ATTRIBUTE.MANA_REGEN)
+        
+        Previous_Mana = self.Actual_Mana
+        
+        Before_Clamp_Mana = self.Actual_Mana + Amount
+        After_Clamp_Mana = Clamp(Before_Clamp_Mana, self.Total_Attribute(_ATTRIBUTE.MAX_MANA))
+        
+        self.Actual_Mana = After_Clamp_Mana
+
+        return (self.Actual_Health - Previous_Mana)
     
     def Total_Attribute(self, 
                         Attribute: 
@@ -254,5 +267,4 @@ class ENTITY:
         elif isinstance(Attribute, _TYPE_RESISTANCES):
             return (0 + Total_Additives) * Total_Multiplicatives
 
-#TESTE
                     

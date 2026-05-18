@@ -5,7 +5,9 @@ Player_Attributes = {
     "player_kimeras_fit_breeding": [],
     "player_kimeras_available_breeding": [],
     "player_princesses": [],
-    "player_queen": []
+    "player_queen": [],
+    "player_team": [],
+    
 }
 
 def Actualize_Kimeras():

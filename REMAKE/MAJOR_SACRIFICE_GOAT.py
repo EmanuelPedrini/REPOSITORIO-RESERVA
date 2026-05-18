@@ -31,8 +31,6 @@ Mariazinha_Mata_Frango.Attribute_Modifiers.extend([
     ATTRIBUTE_MODIFIER(_ATTRIBUTE.VAMPIRISM, _MODIFIER_TYPE.ADDITIVE, 50, Mariazinha_Mata_Frango, "placeholder")
 ])
 
-New_Kimera = KIMERA.Breeding_Between(Mariazinha_Mata_Frango, Joao_Mata_Galinha, 0, 0, 0)
-print(New_Kimera)
+New_Kimera = KIMERA.Breeding_Between(Joana_Mata_Galinha, Joao_Mata_Galinha, 29, 29, 29)
 
-Combat = COMBAT_SYSTEM([Mariazinha_Mata_Frango, Joana_Mata_Galinha], [Chainsaw_Head])
-COMBAT_SYSTEM.Combat_Between(Combat)
+COMBAT_SYSTEM([New_Kimera], [Chainsaw_Head]).Combat_Between()

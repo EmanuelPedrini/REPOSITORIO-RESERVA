@@ -23,7 +23,7 @@ def Generate_Random_Kimera_Name():
                   " ThunderBones", " Head Beater", " Goat"," Uglyas'fuk",
                   " Fish Eater", " Dog Eater", " Woodpecker"," Crocodile", "Gpt",
                   " MixTape"," Hades", " Rimworld"," Isaac"," Hero"," ZERO", ("-"+ str(random.randint(1, 1000))),
-                  "?!", " Meat Grinder", " Hamster Eater", "Bad Kidney", "Soup Criminal",
+                  "?!", " Meat Grinder", " Hamster Eater", " Bad Kidney", "Soup Criminal",
                   " Nuclear Baby"," Nuclear Waster"," Uranium"," Tax Evasion"," Floor Licker",
                   " Door Kicker"," Knee Biter"," Teeth Eater",", The Big"," Mama Killer",
                   " Papa Killer", ".exe"]
