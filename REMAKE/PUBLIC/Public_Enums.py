@@ -108,3 +108,7 @@ class _HIERARCHY(Enum):
     COMMONER = 0
     PRINCESS = 1
     QUEEN = 2
+    
+class _POINT(Enum):
+    POSITIVE = 0
+    NEGATIVE = 1

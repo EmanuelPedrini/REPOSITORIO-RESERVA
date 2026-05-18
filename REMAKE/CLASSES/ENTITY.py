@@ -46,7 +46,7 @@ class ENTITY:
                  Skills: list[_SKILL],
                  Passives: list[_PASSIVE],
                  Mutations: list[_MUTATIONS],
-                 Basic_Attack: _BASIC_ATTACK,
+                 Basic_Attacks: list[_BASIC_ATTACK],
                  Side: _SIDE = _SIDE.ENEMY
                  ):
         
@@ -97,8 +97,8 @@ class ENTITY:
         self.All_Attributes_Multiplier: float = 1
         
         #MUDANDO O SISTEMA DE ATAQUE BÁSICO
-        self.Original_Attack: _BASIC_ATTACK = Basic_Attack
-        self.Current_Attack: _BASIC_ATTACK = Basic_Attack 
+        self.Original_Attack = Basic_Attacks[0]
+        self.Current_Attacks = Basic_Attacks
         
         self.EQUIPMENTS = {
             _EQUIPMENT_SLOTS.HEAD: None,
@@ -168,7 +168,7 @@ class ENTITY:
             return (
             f"\n"
             f"{ "=" * (Bar_Half_Size(self.Name) if (len(self.Name)%2==0) else (Bar_Half_Size(self.Name)-1)) } {self.Name} {"="*(Bar_Half_Size(self.Name))}\n"
-            f"   {self.Gender.name:<21}|       {self.Current_Attack}\n"
+            f"   {self.Gender.name:<21}|       {self.Current_Attacks}\n"
             f"{"="*Bar_Half_Size("STATUS")} STATUS {"="*Bar_Half_Size("STATUS")}\n"
             f"   HP: {Health_Bar:<17}\n   MANA: {self.Actual_Mana} / {self.Total_Attribute(_ATTRIBUTE.MAX_MANA)} ( {(self.Actual_Mana / self.Total_Attribute(_ATTRIBUTE.MAX_MANA)) * 100} % )\n"
             f"{"="*Bar_Half_Size("ATTRIBUTES")} ATTRIBUTES {"="*Bar_Half_Size("ATTRIBUTES")}\n"

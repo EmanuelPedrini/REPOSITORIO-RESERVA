@@ -1,5 +1,6 @@
 from CLASSES.ENTITY import ENTITY
 from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _SIDE, _GENDER
+from CLASSES.SKILLS import _SKILL
 from PUBLIC.Public_Classes import DAMAGE
 from CLASSES.BASIC_ATTACK import _BASIC_ATTACK
 from PUBLIC.Public_Standards import *
@@ -65,6 +66,20 @@ class COMBAT_SYSTEM:
     
     def Round_End(self):
         pass
+    
+    def Show_Options(self, Character, Ex, Max):
+        Order = 1
+        for Attack in Character.Current_Attacks:
+            print(f"[ {Order} ] - {Attack.Name} [ {Ex} / {Max} ]")
+            Order +=1
+
+        for Skill in Character.Skills:
+            if Skill.Mana_Cost > 0:
+                print(f"[ {Order} ] - {Skill.Name} ( {Skill.Mana_Cost} Mana )")
+                Order +=1
+            else:
+                print(f"[ {Order} ] - {Skill.Name}")
+                Order +=1
         
     def Show_Character_Options(self, Character):
         
@@ -88,33 +103,26 @@ class COMBAT_SYSTEM:
                     break
                 
                 print("Time to Act!\nActions:")
-                print(f"[ 1 ] - BASIC ATTACK [ {Executed_Attacks} / {Maximum_Attacks} ]")
                 
-                for Order, Skill in enumerate(Character.Skills):
-                    if Skill.Mana_Cost > 0:
-                        print(f"[ {Order + 2} ] - {Skill.Name} ( {Skill.Mana_Cost} Mana )")
-                    else:
-                        print(f"[ {Order + 2} ] - {Skill.Name}")
-                        
+                self.Show_Options(Character, Executed_Attacks, Maximum_Attacks)
+                
                 Intent = Loop_Input()
-                
-                if Intent == "1":
-                    if Executed_Attacks >= Maximum_Attacks:
-                        print("You already used ALL your basic attacks this TURN")
-                        
-                    else:
-                        Attack_Report = Character.Current_Attack.Basic_Attack(Character, self)
-                        print(Attack_Report)
-                        Executed_Attacks += 1
-                        continue
                             
-                elif Intent.isdigit():
-                    Index = int(Intent) - 2
-                    if 0 <= Index < len(Character.Skills):
-                        Used_Skill = Character.Skills[Index]
-                        Casted = Used_Skill.Cast(Character, self)
-                        print(Casted)
-                        
+                if Intent.isdigit():
+                    Character_Options = Character.Current_Attacks + Character.Skills
+                    Index = int(Intent) - 1
+                    if 0 <= Index < len(Character_Options):
+                        Used = Character_Options[Index]
+                        if isinstance(Used, _SKILL):
+                            Utilized = Used.Cast(Character, self)
+                        elif isinstance(Used, _BASIC_ATTACK):
+                            if Executed_Attacks < Maximum_Attacks:
+                                Utilized = Used.Basic_Attack(Character, self)
+                                Executed_Attacks += 1
+                            else:
+                                Utilized = f"{Character.Name} used all ATTACKS for this TURN!"
+                        print(Utilized)
+ 
                         continue
                     else:
                         print("INVALID")
@@ -138,15 +146,15 @@ class COMBAT_SYSTEM:
                 break
             
             Possible_Skills = [Skill for Skill in Enemy.Skills if Skill.Can_Cast(Enemy)]
-            
             if Enemy.Stunned:
                 print(f"{Enemy.Name} is STUNNED!!\n")
                 time.sleep(1)
                 Enemy.Stunned = False
                 break
-            
+        
             elif Executed_Attacks < Maximum_Attacks:
-                Attack_Report = Enemy.Current_Attack.Basic_Attack(Enemy, self)
+                Attack_Report = random.choice([Enemy.Current_Attacks])
+                Attack_Report = Attack_Report.Basic_Attack(Enemy, self)
                 print(Attack_Report)
                 Executed_Attacks += 1
                 continue

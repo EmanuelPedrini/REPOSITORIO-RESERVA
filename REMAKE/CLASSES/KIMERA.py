@@ -2,30 +2,30 @@ from CLASSES.ENTITY import ENTITY
 from PUBLIC.Public_Enums import _SIDE, _GENDER, _ATTRIBUTE, _DAMAGE_TYPE, _HIERARCHY
 from PUBLIC.Public_Standards import *
 from PUBLIC.Public_Random_Generators import Generate_Random_Kimera_Name
-    
+from CLASSES.BASIC_ATTACK import Melee_Natural_Attack, Ranged_Natural_Attack
+from CLASSES.SKILLS import Fireball, Vampiric_Bite
 class KIMERA(ENTITY):
     def __init__(self, 
                  Name, 
-                 Gender, 
-                 Muscles, Bones, Haste, Brain, Memory, Faith, 
+                 Gender, Muscles, Bones, Haste, Brain, Memory, Faith, 
                  Skills, 
                  Passives, 
                  Mutations, 
-                 Basic_Attack,
+                 Basic_Attacks,
                  Hierarchy_Level,
                  Side = _SIDE.PLAYER):
-        
         super().__init__(Name, 
                          Gender, 
                          Muscles, Bones, Haste, Brain, Memory, Faith, 
                          Skills, 
                          Passives, 
                          Mutations, 
-                         Basic_Attack,
+                         Basic_Attacks, 
                          Side)
-        
         self.Hierarchy_Level = Hierarchy_Level
         self.Out = False
+        self.Age = 1
+        self.Exhausted = False
         
     @classmethod
     def Breeding_Between(cls, First_Parent: KIMERA, 
@@ -45,7 +45,7 @@ class KIMERA(ENTITY):
                 
             Random_Mutation_Number = random.randint(1, 100)
             
-            #DECIDES IF THE MUTATION WIlL OCCUR
+            #DECIDES IF THE MUTATION WILL OCCUR
             if (Random_Mutation_Number + Mutation_Rate) >= 96:
                 Mutation_Result_Roll = random.randint(1, 100)
             
@@ -82,7 +82,9 @@ class KIMERA(ENTITY):
                 
             
         return cls(Generate_Random_Kimera_Name(), 
+                   
                 random.choice([_GENDER.MALE, _GENDER.FEMALE]) if random.randint(1, 100) <= 85 else _GENDER.HERMAPHRODITE,
+                
                 Hereditary_Attribute(First_Parent.ATTRIBUTES[_ATTRIBUTE.MUSCLES], 
                                      Second_Parent.ATTRIBUTES[_ATTRIBUTE.MUSCLES], 
                                      Breeding_Quality, Mutation_Rate, Mutation_Quality),
@@ -106,17 +108,23 @@ class KIMERA(ENTITY):
                 Hereditary_Attribute(First_Parent.ATTRIBUTES[_ATTRIBUTE.FAITH], 
                                      Second_Parent.ATTRIBUTES[_ATTRIBUTE.FAITH], 
                                      Breeding_Quality, Mutation_Rate, Mutation_Quality),
+                
                 Inherit_Abilities(First_Parent.Skills, Second_Parent.Skills, Breeding_Quality),
+                
                 Inherit_Abilities(First_Parent.Passives, Second_Parent.Passives, Breeding_Quality),
+                
                 Inherit_Mutations(First_Parent, Second_Parent),
-                random.choice([First_Parent.Original_Attack, Second_Parent.Original_Attack]),
+                
+                [random.choice([First_Parent.Original_Attack, Second_Parent.Original_Attack])],
+                
                 Child_Hierarchy(First_Parent, Second_Parent)
                 
         )
+        
     @classmethod
-    def Generate_Random(cls, Hierarchy_Level):
+    def Generate_Random(cls, Hierarchy_Level, Random_Quality):
         def Random_Attribute():
-            Random_Generator = random.randint(1, 1000)
+            Random_Generator = (random.randint(1, 1000) + Random_Quality)
             if Random_Generator <= 193:
                 return 4
             elif Random_Generator <= 879:
@@ -131,8 +139,12 @@ class KIMERA(ENTITY):
             Random_Attribute(),
             Random_Attribute(),
             Random_Attribute(),
-            Random_Attribute(),
-            
-            
+            Random_Attribute(), 
+            random.choice([Vampiric_Bite, Fireball
+                           ]),
+            [],
+            [],
+            [random.choice([Melee_Natural_Attack, Ranged_Natural_Attack])],
+            Hierarchy_Level
         )
         

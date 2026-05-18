@@ -180,7 +180,7 @@ Melee_Natural_Attack = _BASIC_ATTACK(
      ],
     TARGETING.Enemy,
     _ATTACK_DISTANCE.MELEE,
-    3,
+    1,
     Hit_Checking.Attack_Roll,
 )
 

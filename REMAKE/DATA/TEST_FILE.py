@@ -10,7 +10,7 @@ Chainsaw_Head = ENTITY("Chainsaw Head",
                     _GENDER.MALE, 
                     2, 0, 2, 2, 3, 1, 
                     [], [], [], 
-                    Melee_Natural_Attack)
+                    [Melee_Natural_Attack])
 
 Chainsaw_Head.Attribute_Modifiers.extend([
     ATTRIBUTE_MODIFIER(_ATTRIBUTE.EXTRA_ATTACKS, _MODIFIER_TYPE.ADDITIVE, 1, Chainsaw_Head, "placeholder")
