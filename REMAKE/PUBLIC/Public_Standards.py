@@ -2,6 +2,7 @@ import random, time, os, json, copy
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional
+
 Conversions = {
     "Resistance_Conversion": lambda x: x/(x + 100),
     "Attribute_Conversion": 0.75,

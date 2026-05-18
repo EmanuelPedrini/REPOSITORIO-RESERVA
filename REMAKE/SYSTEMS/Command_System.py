@@ -1,3 +1,4 @@
+from SYSTEMS.Character_Systems import Player_Attributes
 def Validate_Enumbered_Choice(Possible_Choices, Choice):
     if Choice.isdigit():
         Index = int(Choice) - 1
@@ -56,41 +57,50 @@ def calculation(*args):
     except Exception as Error:
         print(f"INVALID COMMAND, {type(Error).__name__.upper()}.")
 
-Code_Context = {}
-
 def command(*args):
     if args:
         Code = " ".join(args)
     else:
         Code_Lines = []
-        print("MULTILINE CONSOLE MODE. Type 'endcons' to execute.")
+        print("MULTILINE CONSOLE MODE. Type 'end' to execute.")
         while True:
             Line = input(">> ")
             
-            if Line.strip().lower() == "endcons":
+            if Line.strip().lower() in ("endcons", "end", "finish", "exec", "execute", "start", "let", 
+                                        "go", "c!", "#c", "console", "cons"):
                 break
             Code_Lines.append(Line)
             
             Code = "\n".join(Code_Lines)
     try:
-        Result = eval(Code, Code_Context)
+        Result = eval(Code, Player_Attributes["player_vars"])
         if Result is not None:
             print(f">> {Result}")
             
     except SyntaxError:
         
         try:
-            exec(Code, Code_Context)
+            exec(Code, Player_Attributes["player_vars"])
             
         except Exception as Error:
             print(f"INVALID COMMAND, {type(Error).__name__.upper()}.")
             
     except Exception as Error:
         print(f"INVALID COMMAND, {type(Error).__name__.upper()}.")
-        
+
+def look_teeths(*args):
+    pass
         
 
 Valid_Commands = {
+    
     "calc": calculation,
-    "cons": command
+    "calculation": calculation,
+    "+c": calculation,
+    
+    "cons": command,
+    "console": command,
+    "#c": command,
+    "c!": command
+    
 }

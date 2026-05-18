@@ -7,7 +7,7 @@ Player_Attributes = {
     "player_princesses": [],
     "player_queen": [],
     "player_team": [],
-    
+    "player_vars": {},
 }
 
 def Actualize_Kimeras():
@@ -22,9 +22,19 @@ def Actualize_Kimeras():
             Player_Attributes["player_queen"].append(Kimera)
         
 
-def Available_for_Breeding():
-    Available = []
+def Actualize_fit_for_Breeding():
+    Player_Attributes["player_kimeras_fit_breeding"].clear()
+    
     for Kimera in Player_Attributes["all_player_kimeras"].copy():
-        if Kimera.Age > 2 and not Kimera.Exhausted:
-            Available.append(Kimera)
-    return Available
+        
+        if Kimera.Age > 20:
+            Player_Attributes["player_kimeras_fit_breeding"].append(Kimera)
+
+def Actualize_Available_for_Breed():
+    Player_Attributes["player_kimeras_available_breeding"].clear()
+    
+    for Kimera in Player_Attributes["all_player_kimeras"].copy():
+        
+        if not Kimera.Exhausted:
+            Player_Attributes["player_kimeras_available_breeding"].append(Kimera)
+    

@@ -30,13 +30,6 @@ Mariazinha_Mata_Frango = KIMERA("Mariazinha Mata-Frango",
                             [Ranged_Natural_Attack],
                             _HIERARCHY.COMMONER)
 
-
-
-
-
-
-
-############################################
 class _GAME_STATE(Enum):
     EXPEDITION = 0
     MENU = 1
@@ -54,18 +47,19 @@ def GAME_MAIN_STATE(GAME_STATE: _GAME_STATE):
             LOBBY()
         case _GAME_STATE.TUTORIAL:
             TUTORIAL
-        # case _GAME_STATE.SELECTION:
-            # SELECTION()
         case _:
             raise "GAME STATE ERROR!!!!"
 
 
 def EXPEDITION():
     pass 
+
 def MENU():
     pass
+
 def LOBBY():
     pass
+
 def TUTORIAL():
     pass
 
@@ -87,7 +81,8 @@ class CHOICE_SYSTEM:
                 
             Kimera = input("> ")
             
-            if Kimera.lower() in ("end", "finish", "ed", "en", "ok", "let", "go", "finished", "fn", "comfirm"):
+            if Kimera.lower().strip() in ("end", "finish", "ed", "en", "ok", "let", 
+                                          "go", "finished", "fn", "comfirm"):
                 if len(User_Choices) >= Minimum:
                     return User_Choices
                 print(f"Choose at least {Minimum} KIMERAS to CONTINUE!")
@@ -124,28 +119,23 @@ class CHOICE_SYSTEM:
                 print("Your choices:")
                 for i in User_Choices: print(f"-> {i.Name}")
                 
+            elif Kimera.lower().strip() in ("lookteeths", "lk", "lt", "teeth", "teeths", "examine", "look", "inspect", "see", 
+                                            "detail", "information","info","whereabout","about", "inspec", "tet", "inf"):
+                pass
+                
             else:
                 print("INVALID")
                 continue
+#VAI TOMAR NO KU, CHATICE DO CARALHO, GASTEI 30 MINUTOS NESSA MERDA
+            
 #TEAM SELECTION SYSTEM
 @dataclass
 class SELECTION_SYSTEM(CHOICE_SYSTEM):
     def TEAM_SELECTION():
-        Player_Team = []
-        Actualize_Kimeras(Player_Attributes["all_player_kimeras"])
-        (print("SELECT YOUR FIGHTERS!!\nIf you want to go back to LOBBY, type [ EXIT ]"))
-        Elegible_Princess = Player_Attributes["player_princesses"].copy()
-        while True:
-            print("Choose your kimera!")
-            for Order, Princess in enumerate(Elegible_Princess):
-                print(f"[ {Order + 1} ] - { Princess.Name }")
-            Kimera = input("> ")
-            if Validate_Enumbered_Choice(Elegible_Princess, Kimera):
-                Player_Team.append(Elegible_Princess[int(Kimera)])
-            else:
-                print("INVALID")
-                continue
-            
+        Actualize_Kimeras()
+        Princesses_Team_Choice = SELECTION_SYSTEM.CHOOSING(1, 3, Player_Attributes["player_princesses"], "SELECT YOUR ADVENTURERS!")
+        Player_Attributes["player_team"].extend(Princesses_Team_Choice)
+        
 #TUTORIAL
 @dataclass
 class TUTORIAL_SYSTEM(CHOICE_SYSTEM):
@@ -156,7 +146,10 @@ class TUTORIAL_SYSTEM(CHOICE_SYSTEM):
         for Number in range(1, 6): Random_Initial_Queens.append(KIMERA.Generate_Random(_HIERARCHY.QUEEN, 244))
         Princeses_Choice = TUTORIAL_SYSTEM.CHOOSING(4, 4, Random_Initial_Princesses, "Choose your PRINCESSES!")
         Queen_Choice = TUTORIAL_SYSTEM.CHOOSING(1, 1, Random_Initial_Queens, "Choose your QUEEN!")
-        Player_Attributes["player_princesses"].extend(Princeses_Choice)
-        Player_Attributes["player_queen"].extend(Queen_Choice)
+        Player_Attributes["all_player_kimeras"].extend(Princeses_Choice + Queen_Choice)
 
-tuts = TUTORIAL_SYSTEM.TUTORIAL()
+class EXPEDITION_SYSTEM:
+    def START_EXPEDITION():
+        Player_Team_Selection = SELECTION_SYSTEM.TEAM_SELECTION()
+        
+My_kimera = KIMERA.Generate_Random(_HIERARCHY.PRINCESS)

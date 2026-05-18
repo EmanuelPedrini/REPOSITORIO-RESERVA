@@ -7,7 +7,8 @@ from CLASSES.SKILLS import Fireball, Vampiric_Bite
 class KIMERA(ENTITY):
     def __init__(self, 
                  Name, 
-                 Gender, Muscles, Bones, Haste, Brain, Memory, Faith, 
+                 Gender, 
+                 Muscles, Bones, Haste, Brain, Memory, Faith, 
                  Skills, 
                  Passives, 
                  Mutations, 

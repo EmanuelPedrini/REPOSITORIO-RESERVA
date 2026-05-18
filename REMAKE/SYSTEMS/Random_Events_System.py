@@ -7,7 +7,7 @@ from CLASSES.EVENT import EVENT
 def Event_Generator(Rooms_Pool):
     Random_Event_Generator = random.randint(1, 1000)
     
-    if Random_Event_Generator <= 242:
+    if Random_Event_Generator <= 212:
         return (_SITE.BAD_EVENT, random.choice(Bad_Events))
 
     elif Random_Event_Generator <= 537:

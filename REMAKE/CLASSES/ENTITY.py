@@ -6,7 +6,7 @@ from CLASSES.BASIC_ATTACK import _BASIC_ATTACK
 from PUBLIC.Public_Enums import _ATTRIBUTE, _ATTACK_DISTANCE, _TYPE_RESISTANCES, _MODIFIER_TYPE, _GENDER, _SIDE, _EQUIPMENT_SLOTS, DAMAGE_RESISTANCE_MAP, _DAMAGE_TYPE
 from PUBLIC.Public_Classes import DAMAGE
 from PUBLIC.Public_Standards import Conversions, Clamp
-# Só rodar pela raiz do projeto que essa porra para de chorar por causa de import
+# SÓ RODAR PELA RAIZ DO PROJETO QUE ESSA DESGRAÇA DO CARALHO PARA DE CHORAR POR CAUSA DE IMPORT
 
 class ATTRIBUTE_MODIFIER():
     def __init__(self, 
