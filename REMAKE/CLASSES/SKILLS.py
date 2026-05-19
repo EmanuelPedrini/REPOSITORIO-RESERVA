@@ -5,40 +5,40 @@ from SYSTEMS.Command_System import Target_Choice
 
 class _SKILL:
     def __init__(self,
-                 ID: int,
+                 ID: str,
                  Name: str, 
-                 Mana_Cost: int, 
+                 Mana_Cost: int,
+                 Mana_Type, 
                  Effects, 
-                 Target_Type):
+                 Target_Type,
+                 Quantity):
         
         self.ID  = ID
         self.Name = Name
         self.Mana_Cost = Mana_Cost
+        self.Mana_Type = Mana_Type
         self.Effects = Effects
         self.Target_Type = Target_Type
-
-    def Can_Cast(self, Caster):
-        return (Caster.Actual_Mana >= self.Mana_Cost)
+        self.Quantity = Quantity
 
     def Cast(self, Caster, Combat):
-        if self.Can_Cast(Caster):
+        if self.Mana_Type(Caster, self.Mana_Cost):
             Enemy_Targets = self.Target_Type(Caster, Combat)
 
             if not Enemy_Targets:
                 return f"{Caster.Name} tried to use {self.Name}, but NO Enemy_Targets!"
             
-            Caster.Actual_Mana -= self.Mana_Cost
             Report = [f"{Caster.Name} used {self.Name}!"]
 
             for target in Enemy_Targets:
-                # Report.append(f"-> {target.Name}")
-                for effect in self.Effects:
-                    result = effect.Apply(Caster, target, Combat)
-                    if result:
-                        Report.append(result)
+                for Times in range(self.Quantity):
+                    for effect in self.Effects:
+                        result = effect.Apply(Caster, target, Combat)
+                        if result:
+                            Report.append(result)
 
             return "\n".join(Report)
-        return f"{Caster.Name} doesn't have sufficient mana to cast {self.Name.upper()}!"
+        return f"{Caster.Name} can't cast {self.Name.upper()}!"
     
     def __repr__(self):
         if self is None: return "INEXISTENT"
@@ -64,9 +64,9 @@ class DamageEffect(Effect):
         Base_Amount = self.Attribute(Caster)
         damage = int(Base_Amount * self.Multiplier)
 
-        Target.Take_Damage(DAMAGE(damage, self.Type, Caster))
+        Real_Damage = Target.Take_Damage(DAMAGE(damage, self.Type, Caster))
 
-        return f"-> {Target.Name} took {damage} damage"
+        return f"-> {Target.Name} took {Real_Damage} damage"
 
 class FixedDamageEffect(Effect):
     def __init__(self, Amount, Type: _DAMAGE_TYPE):
@@ -74,42 +74,27 @@ class FixedDamageEffect(Effect):
         self.Type = Type
 
     def Apply(self, Caster, Target, Combat):
-        Target.Take_Damage(DAMAGE(self.Amount, self.Type, Caster))
+        Real_Damage = Target.Take_Damage(DAMAGE(self.Amount, self.Type, Caster))
 
-        return f"-> {Target.Name} took {self.Amount} damage"
-
-
-class HealEffect(Effect):
-    def __init__(self, Attribute, Multiplier):
-        
-        self.Multiplier = Multiplier
-        self.Attribute = Attribute
-
-    def Apply(self, Caster, Target, Combat):
-        Base_Amount = self.Attribute(Caster)
-        Healed_Amount = int(Base_Amount * self.Multiplier)
-
-        Target.Heal(Healed_Amount)
-
-        return f"-> {Target.Name} healed {Healed_Amount} HP"
+        return f"-> {Target.Name} took {Real_Damage} damage"
 
 class FixedHealEffect(Effect):
     def __init__(self, Amount):
         self.Amount = Amount
         
     def Apply(self, Caster, Target, Combat):
-        Target.Heal(self.Amount)
+        Real_Heal = Target.Heal(self.Amount)
 
-        return f"-> {Target.Name} healed {self.Amount} HP"
+        return f"-> {Target.Name} healed {Real_Heal} HP"
 
+# VOU TER QUE MODIFICAR ISSO DEPOIS #
+# class ShieldEffect(Effect):
+#     def __init__(self, Amount):
+#         self.Amount = Amount
 
-class ShieldEffect(Effect):
-    def __init__(self, Amount):
-        self.Amount = Amount
-
-    def Apply(self, Caster, Target, Combat):
-        Target.Shield += self.Amount
-        return f"-> {Target.Name} gained {self.Amount} shield"
+#     def Apply(self, Caster, Target, Combat):
+#         Target.Shield += self.Amount
+#         return f"-> {Target.Name} gained {self.Amount} shield"
 
 class HealEffect(Effect):
     def __init__(self, Multiplier, Attribute):
@@ -118,26 +103,41 @@ class HealEffect(Effect):
         self.Attribute = Attribute
 
     def Apply(self, Caster, Target, Combat):
+        
         Base_Amount = self.Attribute(Caster)
         Healed_Amount = int(Base_Amount * self.Multiplier)
 
-        Target.Heal(Healed_Amount)
+        Real_Heal = Target.Heal(Healed_Amount)
 
-        return f"-> {Target.Name} healed {Healed_Amount} HP"
-
+        return f"-> {Target.Name} healed {Real_Heal} HP"
+    
+class MANA_TYPE:
+    def Standard_Mana_Type(Caster, Mana_Cost):
+        if Caster.Actual_Mana >= Mana_Cost:
+            Caster.Use_Mana(Mana_Cost)
+            return True
+        return False 
+    
 class Targeting:
     @staticmethod
     def Enemy(Caster, Combat):
         Enemy_Targets = Combat.Get_Enemy_Team(Caster)
+        if not Enemy_Targets:
+            return []
+        
         if Caster.Side == _SIDE.PLAYER:
             Choosed_Target = Target_Choice(Enemy_Targets)
+            
         elif Caster.Side == _SIDE.ENEMY:
             if not Enemy_Targets:
                 return []
+            
             else:
                 return[random.choice(Enemy_Targets)]
+            
         if not Enemy_Targets:
             return []
+        
         return [Choosed_Target]
 
     @staticmethod
@@ -156,14 +156,18 @@ Fireball = _SKILL(
     "fireball_skill",
     "Fireball",
     50,
+    MANA_TYPE.Standard_Mana_Type,
     [FixedDamageEffect(120, _DAMAGE_TYPE.FIRE)],
-    Targeting.All_Enemies
+    Targeting.All_Enemies,
+    1
 )
 
 Vampiric_Bite = _SKILL(
     "vampiric_bite_skill",
     "Vampiric Bite",
     15,
+    MANA_TYPE.Standard_Mana_Type,
     [FixedDamageEffect(20, _DAMAGE_TYPE.MALIGNANT)],
-    Targeting.Enemy
+    Targeting.Enemy,
+    1
 )

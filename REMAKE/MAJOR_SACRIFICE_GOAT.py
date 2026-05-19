@@ -5,6 +5,7 @@ from CLASSES.BASIC_ATTACK import Melee_Natural_Attack, Melee_Spin_Attack, Ranged
 from DATA.TEST_FILE import Chainsaw_Head
 from PUBLIC.Public_Enums import _GENDER, _ATTACK_DISTANCE, _DAMAGE_TYPE, _ATTRIBUTE, _TYPE_RESISTANCES, _SIDE, _HIERARCHY
 from CLASSES.SKILLS import Fireball, Vampiric_Bite
+from CLASSES.EVENT import EVENT, Stepping_on_Bear_Trap
 
 Joana_Mata_Galinha = KIMERA("Joana Mata-Galinha", 
                             _GENDER.FEMALE,
@@ -31,6 +32,7 @@ Mariazinha_Mata_Frango.Attribute_Modifiers.extend([
     ATTRIBUTE_MODIFIER(_ATTRIBUTE.VAMPIRISM, _MODIFIER_TYPE.ADDITIVE, 50, Mariazinha_Mata_Frango, "placeholder")
 ])
 
-New_Kimera = KIMERA.Breeding_Between(Joana_Mata_Galinha, Joao_Mata_Galinha, 29, 29, 29)
+My_Party = [Mariazinha_Mata_Frango, Joana_Mata_Galinha, Joao_Mata_Galinha]
 
-COMBAT_SYSTEM([New_Kimera], [Chainsaw_Head]).Combat_Between()
+Step = Stepping_on_Bear_Trap
+Step.Trigger(My_Party)

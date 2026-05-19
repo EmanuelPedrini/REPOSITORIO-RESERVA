@@ -228,6 +228,9 @@ class ENTITY:
 
         return (self.Actual_Health - Previous_Mana)
     
+    def Use_Mana(self, Amount):
+        self.Actual_Mana -= Amount
+    
     def Total_Attribute(self, 
                         Attribute: 
                             _ATTRIBUTE | _TYPE_RESISTANCES):

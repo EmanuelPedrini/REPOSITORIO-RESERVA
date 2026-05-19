@@ -39,6 +39,70 @@ class Simple_Damage_Effect(Effect):
             return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage, {Attacker.Name} healed HEALTH, but is already FULL HEALED!\n"
         return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage\n"
 
+class Based_Damage_Effect(Effect):
+    def __init__(self, Attribute,
+                 Base,
+                 Multiplier, 
+                 Critical_Chance_Type, 
+                 Critical_Multiplier_Type,
+                 Vampirism_Type,
+                 Type: _DAMAGE_TYPE):
+        
+        self.Base = Base
+        self.Multiplier = Multiplier
+        self.Attribute = Attribute
+        self.Type = Type
+        self.Critical_Chance_Type = Critical_Chance_Type
+        self.Critical_Multiplier_Type = Critical_Multiplier_Type
+        self.Vampirism_Type = Vampirism_Type
+
+    def Apply(self, Attacker, Target, Combat):
+        
+        Base_Amount = Attacker.Total_Attribute(self.Attribute)
+        Damage = int(self.Base + (Base_Amount * self.Multiplier))
+        if self.Critical_Chance_Type(Attacker):
+            Damage = int(Damage * self.Critical_Multiplier_Type(Attacker))
+
+        Damage_Taken_After_Resistances = Target.Take_Damage(DAMAGE(Damage, self.Type, Attacker))
+        Vampirism = int(self.Vampirism_Type(Attacker, Damage_Taken_After_Resistances))
+        if Vampirism > 0:
+            Real_Heal = Attacker.Heal(Vampirism)
+            if Real_Heal > 0:
+                return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage, {Attacker.Name} healed {Real_Heal} HEALTH!\n"
+            return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage, {Attacker.Name} healed HEALTH, but is already FULL HEALED!\n"
+        return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage\n"
+
+class Fixed_Damage_Effect(Effect):
+    def __init__(self,
+                 Base, 
+                 Critical_Chance_Type, 
+                 Critical_Multiplier_Type,
+                 Vampirism_Type,
+                 Type: _DAMAGE_TYPE):
+        
+        self.Base = Base
+        self.Type = Type
+        self.Critical_Chance_Type = Critical_Chance_Type
+        self.Critical_Multiplier_Type = Critical_Multiplier_Type
+        self.Vampirism_Type = Vampirism_Type
+
+    def Apply(self, Attacker, Target, Combat):
+        
+        Damage = int(self.Base)
+        if self.Critical_Chance_Type(Attacker):
+            Damage = int(Damage * self.Critical_Multiplier_Type(Attacker))
+
+        Damage_Taken_After_Resistances = Target.Take_Damage(DAMAGE(Damage, self.Type, Attacker))
+        Vampirism = int(self.Vampirism_Type(Attacker, Damage_Taken_After_Resistances))
+        
+        if Vampirism > 0:
+            Real_Heal = Attacker.Heal(Vampirism)
+            if Real_Heal > 0:
+                return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage, {Attacker.Name} healed {Real_Heal} HEALTH!\n"
+            return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage, {Attacker.Name} healed HEALTH, but is already FULL HEALED!\n"
+        return f"-> {Target.Name} took {Damage_Taken_After_Resistances} damage\n"
+
+
 class TARGETING:
     @staticmethod
     def Enemy(Attacker, Combat):
@@ -172,7 +236,7 @@ class _BASIC_ATTACK:
 Melee_Natural_Attack = _BASIC_ATTACK(
     "melee_natural_attack",
     "BASIC ATTACK ( MELEE )",
-    [Simple_Damage_Effect(_ATTRIBUTE.MUSCLES, 10,
+    [Based_Damage_Effect(_ATTRIBUTE.MUSCLES, 10, 8,
                         Critical_Checking.Critical_Roll, 
                         Critical_Style.Basic_Critical, 
                         Vampirism_Checking.Basic_Vampirism,  
@@ -187,7 +251,7 @@ Melee_Natural_Attack = _BASIC_ATTACK(
 Ranged_Natural_Attack = _BASIC_ATTACK(
     "ranged_natural_attack",
     "RANGED ATTACK",
-    [Simple_Damage_Effect(_ATTRIBUTE.HASTE, 9,
+    [Based_Damage_Effect(_ATTRIBUTE.HASTE, 9, 7,
                         Critical_Checking.Critical_Roll, 
                         Critical_Style.Basic_Critical, 
                         Vampirism_Checking.Basic_Vampirism,  
@@ -202,13 +266,28 @@ Ranged_Natural_Attack = _BASIC_ATTACK(
 Melee_Spin_Attack = _BASIC_ATTACK(
     "melee_spin_attack",
     "SPIN ATTACK",
-    [Simple_Damage_Effect(_ATTRIBUTE.MUSCLES, 8,
+    [Based_Damage_Effect(_ATTRIBUTE.MUSCLES, 6, 7,
                         Critical_Checking.Dont_Critical_Hit, 
                         Critical_Style.Basic_Critical, 
                         Vampirism_Checking.Basic_Vampirism,  
                         _DAMAGE_TYPE.BLUDGEONING)
      ],
     TARGETING.All_Enemies,
+    _ATTACK_DISTANCE.MELEE,
+    1,
+    Hit_Checking.Attack_Roll,
+)
+
+Chainsaw_Head_Natural_Attack = _BASIC_ATTACK(
+    "chainsaw_head_natural_attack",
+    "THIS SHOULD BE A ONLY ENEMY ATTACK, IF THIS APPEARS IN ANY PLACE, I'AM GOING TO FUCKING KILL MYSELF.",
+    [Fixed_Damage_Effect(6,
+                        Critical_Checking.Critical_Roll, 
+                        Critical_Style.Basic_Critical, 
+                        Vampirism_Checking.Basic_Vampirism,  
+                        _DAMAGE_TYPE.SLASHING)
+     ],
+    TARGETING.Enemy,
     _ATTACK_DISTANCE.MELEE,
     1,
     Hit_Checking.Attack_Roll,

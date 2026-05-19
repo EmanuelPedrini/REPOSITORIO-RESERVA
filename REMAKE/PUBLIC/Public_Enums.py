@@ -112,3 +112,11 @@ class _HIERARCHY(Enum):
 class _POINT(Enum):
     POSITIVE = 0
     NEGATIVE = 1
+    
+class _DURATION(Enum):
+    TURN = 0
+    ROUND = 1
+    COMBAT = 2
+    FLOOR = 3
+    EXPEDITION = 4
+    PERMANENT = 5
